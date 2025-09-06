@@ -1,36 +1,46 @@
 servutils_mcp_grafana/
-|- README.md
-|- .env
-|- .env.example
-|- .gitignore
-|- LICENSE.txt
-|- start_everything.sh
-|- docker-compose.yaml
-|- stop_everything.sh
+
 |- bootstrap_helpers/
 __|- load_env_first.sh
 __|- ensure_docker_running.sh
 __|- get_docker_compose_cmd.sh
 __|- wait_for_specified_services.sh
+
+|- example-metrics-logs_emitter/
+__|- create_example_dashboards.sh
+__|- Dockerfile
+__|- example-logs_emitter.py
+__|- example-metrics_emitter.py
+__|- prometheus.yml
+__|- start_example_emitter_servers.sh
+
 |- grafana/
-__|- start_grafana_server.sh
-__|- prometheus/
-____|- start.sh
-____|- Dockerfile
 __|- loki/
-____|- start.sh
 ____|- Dockerfile
+____|- start.sh
+__|- prometheus/
+____|- Dockerfile
+____|- start.sh
 __|- tempo/
-____|- start.sh
 ____|- Dockerfile
-|- main_mcp_server/
-__|- start_mcp_server.sh
+____|- start.sh
+__|- start_grafana_server.sh
+
+|- mcp-server/
+__|- logs/
+____|- handlers.py
+__|- metrics/
+____|- handlers.py
+____|- prometheus_helper.py  (basic helper to query some prometheus server for metrics)
 __|- Dockerfile
 __|- main.py
 __|- requirements.txt
-|- example-metrics-logs_source/
-__|- example-metrics_emitter_server.py
-__|- example-logs_emitter_server.py
-__|- start_example_emitter_servers.sh
-__|- create_example_dashboards.sh
-__|- Dockerfile
+__|- start_mcp_server.sh
+
+|- .env
+|- .env.example
+|- .gitignore
+|- docker-compose.yaml
+|- README.md
+|- start_everything.sh
+|- stop_everything.sh

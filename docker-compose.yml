@@ -1,9 +1,52 @@
 # Just to avoid warnings in the cmdline log, can just remove  the first line here about the 
 # 'version: 3.8', as  modern Docker Compose ignores it anyhow:
 # version: '3.8'
-
 services:
-#TODO IMPLEMENT
+  grafana:
+    image: grafana/grafana:latest
+    container_name: servutils_mcp_grafana_grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD}
+    ports:
+      - "${GRAFANA_PORT}:${GRAFANA_PORT}" # host_port:container_port. For easy configuring and consistency just specifying conainer_port to be same. If conflicts you could change it to some other hardcoded value.
+    volumes:
+      - grafana-storage:/var/lib/grafana
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: servutils_mcp_grafana_prometheus
+    ports:
+      - "${PROMETHEUS_PORT}:${PROMETHEUS_PORT}"
+    volumes:
+      - prometheus-storage:/prometheus
+      - ./example-metrics-logs_emitter/prometheus.yml:/etc/prometheus/prometheus.yml
+
+  loki:
+    image: grafana/loki:latest
+    container_name: servutils_mcp_grafana_loki
+    ports:
+      - "${LOKI_PORT}:${LOKI_PORT}"
+
+  mcp-server:
+    build: ./mcp-server
+    container_name: servutils_mcp_grafana_mcp-server
+    ports:
+      - "${MCP_SERVICE_PORT}:${MCP_SERVICE_PORT}"
+    depends_on:
+      - grafana
+      - prometheus
+      - loki
+
+  example-metrics:
+    build: ./example-metrics-logs_emitter
+    container_name: servutils_mcp_grafana_example-metrics
+    ports:
+      - "${EXAMPLE_METRICS_PORT}:${EXAMPLE_METRICS_PORT}"  # host_port:container_port
+
+volumes:
+  grafana-storage:
+  prometheus-storage:
 
 # Just to have an explicit predictable name to find (rather than relying on Docker's auto-gen'd name that'd be same as containing folder):
 networks:

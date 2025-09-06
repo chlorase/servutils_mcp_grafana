@@ -1,3 +1,4 @@
+#TODO: Fixup and implement this completely, namings and paths etc  need fixups:
 #!/usr/bin/env bash
 set -euo pipefail
 
