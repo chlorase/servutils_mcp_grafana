@@ -28,15 +28,17 @@ services:
     ports:
       - "${LOKI_PORT}:${LOKI_PORT}"
 
-  mcp-server:
-    build: ./mcp-server
+  grafana-mcp-server:
+    image: grafana/mcp:latest
     container_name: servutils_mcp_grafana_mcp-server
     ports:
-      - "${MCP_SERVICE_PORT}:${MCP_SERVICE_PORT}"
+      - "${GRAFANA_MCP_PORT}:${GRAFANA_MCP_PORT}"
+    environment:
+      - GRAFANA_URL=${GRAFANA_URL}
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD}
     depends_on:
       - grafana
-      - prometheus
-      - loki
 
   example-metrics:
     build: ./example-metrics-logs_emitter

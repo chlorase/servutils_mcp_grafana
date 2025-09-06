@@ -3,6 +3,7 @@ servutils_mcp_grafana/
 |- bootstrap_helpers/
 __|- load_env_first.sh
 __|- ensure_docker_running.sh
+__|- get_docker_compressor.sh
 __|- get_docker_compose_cmd.sh
 __|- wait_for_specified_services.sh
 
@@ -25,17 +26,6 @@ __|- tempo/
 ____|- Dockerfile
 ____|- start.sh
 __|- start_grafana_server.sh
-
-|- mcp-server/
-__|- logs/
-____|- handlers.py
-__|- metrics/
-____|- handlers.py
-____|- prometheus_helper.py  (basic helper to query some prometheus server for metrics)
-__|- Dockerfile
-__|- main.py
-__|- requirements.txt
-__|- start_mcp_server.sh
 
 |- .env
 |- .env.example
