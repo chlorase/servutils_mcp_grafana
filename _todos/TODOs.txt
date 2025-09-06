@@ -1,0 +1,34 @@
+TODOs:
+
+- server side access first basic setups:
+    - graf, prometh, basic mcp res srv access
+    >done
+    - setup grafana querying ability based off my samples, gen fake data for now
+    >done
+>done for now
+
+- come up with my step by step plans (metaai)
+>ok genreally there
+
+- TODO CONT HERE Sep7: refactgor the start_everything.sh into start_grafana_/prometheus.sh, start_grafana_loki.sh and  use the new startup_scrip_helpers/* sub scripts etc...
+>>> lets rewrite in a new project servutils_mcp_grafana.
+
+- refactoring/reorg in prep for LOki:
+>>> lets rewrite in a new project servutils_mcp_grafana.
+
+- More server:
+    - api interface for mcp for saving. return for now.
+    - datastore redis setup
+        - setup scripts etc
+        - api interface
+        - mcp interface
+>>> lets rewrite in a new project servutils_mcp_grafana.
+
+
+- client/agent proxy
+    - and testable
+- host app, using client.
+- setup basic slackbot hookup
+- save datapoints to redis allow? maybe even an api for that to transfer?
+
+- add multi tenant

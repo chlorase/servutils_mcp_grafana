@@ -1,0 +1,11 @@
+# Just to avoid warnings in the cmdline log, can just remove  the first line here about the 
+# 'version: 3.8', as  modern Docker Compose ignores it anyhow:
+# version: '3.8'
+
+services:
+#TODO IMPLEMENT
+
+# Just to have an explicit predictable name to find (rather than relying on Docker's auto-gen'd name that'd be same as containing folder):
+networks:
+  default:
+    name: servutils_mcp_grafana

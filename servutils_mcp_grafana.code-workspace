@@ -1,0 +1,21 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"files.exclude": {
+			"__pycache__": true,
+			"*.bak": true,
+			"**/__pycache__": true,
+			"**/*.bak": true,
+			"**/*.prom": true,
+			"**/tmp": true,
+			"grafana-data": true,
+			"loki-chunks": true,
+			"loki-index": true,
+			"wal": true
+		}
+	}
+}

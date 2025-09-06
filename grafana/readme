@@ -1,0 +1,8 @@
+Loki is for the MCP logging resource.
+Grafana's Loki service gets and saves logs (via promtail) from some source and puts into grafana server (a go between from a log emitting source and grafana). It also allows LogQL fromatted queries in grafana service.
+
+Grafana-Tempo is for the MCP Tracing resource.
+Grafana's Tempo is for tracing requests through MCP flow.
+
+Prometheus is for the MCP metrics resource.
+Prometheus is the Grafana Metrics solution, scrapes metrics and put into grafana server (a go between from a metrics emitting source, and grafana).

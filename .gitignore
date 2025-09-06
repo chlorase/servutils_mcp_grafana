@@ -1,0 +1,52 @@
+# Docker-related
+**/docker-compose.override.yml
+**/docker-compose.override.yaml
+**/Dockerfile.*
+**/docker/*.log
+**/docker/*.pid
+
+# Docker volumes, WAL and temporary directories
+**/wal/
+**/loki-wal/
+**/loki-index/
+**/loki-chunks/
+**/tmp/
+**/promtail-positions.yaml
+
+# VSCode
+#.vscode/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Python virtual environments (if you use them)
+# And local credentials/config files
+venv/
+myenv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Logs
+*.log
+
+# Node.js (if you have any frontend)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Ignore any temp ms doc files
+~\$*.docx
+
+# Ignore local copy of these:
+Docker.dmg
+*.bak
+*.prom
+grafana-data/
+*.db
+*.sqlite
+*.sqlite3
+
