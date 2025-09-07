@@ -13,18 +13,18 @@ PROJECT_PREFIX=${PROJECT_PREFIX:-servutils_mcp_grafana}
 # Stop and remove Docker containers
 # -----------------------------
 echo "Stopping and removing all ${PROJECT_PREFIX} containers..."
-docker ps -a --format '{{.Names}}' | grep '^${PROJECT_PREFIX}' | xargs -r docker rm -f || true
+docker ps -a --format '{{.Names}}' | grep "^${PROJECT_PREFIX}" | xargs -r docker rm -f || true
 
 # -----------------------------
 # Optionally remove volumes (uncomment if full reset desired)
 # -----------------------------
 # echo "Removing all ${PROJECT_PREFIX} volumes..."
-# docker volume ls -q | grep '${PROJECT_PREFIX}' | xargs -r docker volume rm || true
+# docker volume ls -q | grep "${PROJECT_PREFIX}"" | xargs -r docker volume rm || true
 
 # -----------------------------
 # Remove project network
 # -----------------------------
 echo "Removing project network..."
-docker network ls --format '{{.Name}}' | grep '^${PROJECT_PREFIX}' | xargs -r docker network rm || true
+docker network ls --format '{{.Name}}' | grep "^${PROJECT_PREFIX}" | xargs -r docker network rm || true
 
 echo "All ${PROJECT_PREFIX} containers and network removed."

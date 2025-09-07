@@ -1,0 +1,11 @@
+apiVersion: 1
+
+providers:
+  - name: 'servutils-example-metrics-dashboards'
+    orgId: 1
+    folder: 'Example Metrics'
+    type: file
+    disableDeletion: false
+    editable: true
+    options:
+      path: /var/lib/grafana/dashboards/servutils-example-metrics # coupled to ..

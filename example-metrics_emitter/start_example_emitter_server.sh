@@ -8,10 +8,7 @@ source "$SCRIPT_DIR/../bootstrap_helpers/ensure_docker_running.sh"
 
 MODE=${1:-up}  # default 'up', can also pass 'restart'
 
-EXAMPLE_METRICS_EMITTER_CONTAINER="${PROJECT_PREFIX}_example-metrics"
-EXAMPLE_METRICS_EMITTER_SERVICE="example-metrics_emitter"
-
-source "$SCRIPT_DIR/../bootstrap_helpers/start_service.sh" "${EXAMPLE_METRICS_EMITTER_SERVICE}" "${EXAMPLE_METRICS_EMITTER_CONTAINER}" "${MODE}"
+source "$SCRIPT_DIR/../bootstrap_helpers/start_service.sh" "example_metrics_emitter_servicename" "example_metrics_container" "${MODE}"
 
 if [ "$MODE" == "restart" ]; then
     # Wait for Prometheus to scrape at least one metric from example-metrics
@@ -29,6 +26,7 @@ if [ "$MODE" == "restart" ]; then
         sleep 2
     done
     # Create example dashboard (with retry)
+    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
     "$SCRIPT_DIR/create_example_dashboard.sh"
 else
     # Open Grafana dashboard URL

@@ -1,8 +1,0 @@
-# Configures prometheus' scrape jobs
-# Omit the 'global' and 'scrape_configs' here as this file is simply loaded by the 'main' ../grafana/prometheus/prometheus.yml (see):
-#global:
-#  scrape_interval: 5s
-#scrape_configs:
-  - job_name: 'example-metrics'
-    static_configs:
-      - targets: ['${PROJECT_PREFIX}_example-metrics:${EXAMPLE_METRICS_EMITTER_PORT}']

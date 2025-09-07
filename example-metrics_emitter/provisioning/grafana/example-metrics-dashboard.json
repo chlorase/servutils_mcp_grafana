@@ -1,0 +1,70 @@
+{
+  "dashboard": {
+    "id": null,
+    "uid": "example-dashboard",
+    "title": "Example Metrics Dashboard",
+    "timezone": "utc",
+    "refresh": "30s",
+    "panels": [
+      {
+        "id": 1,
+        "type": "timeseries",
+        "title": "ExampleMetricA, Example CPU + Example mem",
+        "gridPos": {
+          "h": 8,
+          "w": 24,
+          "x": 0,
+          "y": 0
+        },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "none"
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Mem"
+              },
+              "properties": [
+                {
+                  "id": "custom.axisPlacement",
+                  "value": "right"
+                }
+              ]
+            }
+          ]
+        },
+        "options": {
+          "legend": {
+            "displayMode": "list"
+          },
+          "tooltip": {
+            "mode": "single"
+          }
+        },
+        "targets": [
+          {
+            "expr": "exampleMetricA{instance=\"example_metrics_container:8001\"}",
+            "legendFormat": "ExampleMetricA",
+            "refId": "A"
+          },
+          {
+            "expr": "example_cpu_usage{instance=\"example_metrics_container:8001\"}",
+            "legendFormat": "CPU",
+            "refId": "B"
+          },
+          {
+            "expr": "example_memory_usage{instance=\"example_metrics_container:8001\"}",
+            "legendFormat": "Mem",
+            "refId": "C"
+          }
+        ],
+        "datasource": "Prometheus_main"
+      }
+    ],
+    "schemaVersion": 37,
+    "version": 0
+  },
+  "overwrite": true
+}

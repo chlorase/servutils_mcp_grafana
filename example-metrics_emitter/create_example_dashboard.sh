@@ -6,10 +6,10 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # Load environment variables
 source "$SCRIPT_DIR/../bootstrap_helpers/load_env_first.sh"
 
-DASHBOARD_JSON_FILE="$SCRIPT_DIR/../../provisioning/dashboards/example-metrics_dashboard.json"
-TIME_SERIES_FILE="$SCRIPT_DIR/${PROJECT_PREFIX}_example-metrics.prom"
-EXAMPLE_METRICS_EMITTER_CONTAINER="${PROJECT_PREFIX}_example-metrics"
-EXAMPLE_METRICS_EMITTER_SERVICE="example-metrics_emitter"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DASHBOARD_JSON_FILE="$SCRIPT_DIR/provisioning/grafana/example-metrics-dashboard.json"
+TIME_SERIES_FILE="$SCRIPT_DIR/provisioning/grafana/temp_example-metrics.prom"
+EXAMPLE_METRICS_EMITTER_CONTAINERNAME="example_metrics_container"
 
 # Generate example metrics
 echo "Generating example metrics..."
@@ -22,16 +22,16 @@ for TS in $(seq $START 1 $NOW); do
     CPU_VALUE=$((50 + RANDOM % 50))
     MEM_VALUE=$((50 + RANDOM % 200))
 
-    echo "exampleMetricA{instance=\"${EXAMPLE_METRICS_EMITTER_CONTAINER}:${EXAMPLE_METRICS_EMITTER_PORT}\"} $EXAMPLE_VALUE $TS" >> "$TIME_SERIES_FILE"
-    echo "example_cpu_usage{instance=\"${EXAMPLE_METRICS_EMITTER_CONTAINER}:${EXAMPLE_METRICS_EMITTER_PORT}\"} $CPU_VALUE $TS" >> "$TIME_SERIES_FILE"
-    echo "example_memory_usage{instance=\"${EXAMPLE_METRICS_EMITTER_CONTAINER}:${EXAMPLE_METRICS_EMITTER_PORT}\"} $MEM_VALUE $TS" >> "$TIME_SERIES_FILE"
+    echo "exampleMetricA{instance=\"${EXAMPLE_METRICS_EMITTER_CONTAINERNAME}:${EXAMPLE_METRICS_EMITTER_PORT}\"} $EXAMPLE_VALUE $TS" >> "$TIME_SERIES_FILE"
+    echo "example_cpu_usage{instance=\"${EXAMPLE_METRICS_EMITTER_CONTAINERNAME}:${EXAMPLE_METRICS_EMITTER_PORT}\"} $CPU_VALUE $TS" >> "$TIME_SERIES_FILE"
+    echo "example_memory_usage{instance=\"${EXAMPLE_METRICS_EMITTER_CONTAINERNAME}:${EXAMPLE_METRICS_EMITTER_PORT}\"} $MEM_VALUE $TS" >> "$TIME_SERIES_FILE"
 done
 
 echo "Example metrics generated at $TIME_SERIES_FILE"
 
 # Copy metrics to Prometheus container (ensure container is rebuilt if needed)
-docker compose up -d --build ${EXAMPLE_METRICS_EMITTER_SERVICE}
-docker cp "$TIME_SERIES_FILE" "${EXAMPLE_METRICS_EMITTER_CONTAINER}":/tmp/${EXAMPLE_METRICS_EMITTER_CONTAINER}.prom
+docker compose up -d --build "example_metrics_emitter_servicename"
+docker cp "$TIME_SERIES_FILE" "${EXAMPLE_METRICS_EMITTER_CONTAINERNAME}":/tmp/${EXAMPLE_METRICS_EMITTER_CONTAINERNAME}.prom
 
 # Create dashboard JSON
 DASHBOARD_JSON=$(jq -n --arg title "Example Metrics Dashboard" '
@@ -51,7 +51,9 @@ DASHBOARD_JSON=$(jq -n --arg title "Example Metrics Dashboard" '
 ')
 
 # Single panel combining all metrics
-PANEL=$(jq -n --argjson panelId 1 '
+PANEL=$(jq -n --argjson panelId 1 \
+  --arg containerName "$EXAMPLE_METRICS_EMITTER_CONTAINERNAME" \
+  --arg port "$EXAMPLE_METRICS_EMITTER_PORT" '
 {
   "id": $panelId,
   "type": "timeseries",
@@ -70,11 +72,11 @@ PANEL=$(jq -n --argjson panelId 1 '
   },
   "options": { "legend": { "displayMode": "list" }, "tooltip": { "mode": "single" } },
   "targets": [
-    { "expr": "exampleMetricA{instance=\"${EXAMPLE_METRICS_EMITTER_CONTAINER}:${EXAMPLE_METRICS_EMITTER_PORT}\"}", "legendFormat": "ExampleMetricA", "refId": "A" },
-    { "expr": "example_cpu_usage{instance=\"${EXAMPLE_METRICS_EMITTER_CONTAINER}:${EXAMPLE_METRICS_EMITTER_PORT}\"}", "legendFormat": "CPU", "refId": "B" },
-    { "expr": "example_memory_usage{instance=\"${EXAMPLE_METRICS_EMITTER_CONTAINER}:${EXAMPLE_METRICS_EMITTER_PORT}\"}", "legendFormat": "Mem", "refId": "C" }
+    { "expr": "exampleMetricA{instance=\"\($containerName):\($port)\"}", "legendFormat": "ExampleMetricA", "refId": "A" },
+    { "expr": "example_cpu_usage{instance=\"\($containerName):\($port)\"}", "legendFormat": "CPU", "refId": "B" },
+    { "expr": "example_memory_usage{instance=\"\($containerName):\($port)\"}", "legendFormat": "Mem", "refId": "C" }
   ],
-  "datasource": "Prometheus"
+  "datasource": "Prometheus_main"
 }
 ')
 

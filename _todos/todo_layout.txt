@@ -11,8 +11,6 @@ __|- create_example_dashboard.sh
 __|- Dockerfile
 __|- example-metrics_emitter.py
 __|- provisioning
-_____|- prometheus/
-________|- prometheus.yaml    (metics specific for the example-metrics_emitter.py)
 __|- requirements.txt
 __|- start_example_emitter_server.sh
 
@@ -21,7 +19,7 @@ __|- loki/
 ____|- Dockerfile
 ____|- start.sh
 __|- prometheus/
-____|- prometheus.yml  (basic metrics)
+____|- prometheus.yml  (basic metrics + metics specific for the example-metrics_emitter.py)
 ____|- start_prometheus_server.sh
 __|- tempo/
 ____|- Dockerfile

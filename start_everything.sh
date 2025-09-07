@@ -12,7 +12,7 @@ source "./grafana/start_grafana_server.sh" "${MODE}" || { echo "Failed to start 
 source "./grafana/prometheus/start_prometheus_server.sh" "${MODE}" || { echo "Failed to start Prometheus server"; exit 1; }
 
 # Start example metrics emitter and create dashboard
-source "./example-metrics_emitter/start_example_emitter_serve.sh" "${MODE}" || { echo "Failed to start example metrics emitter"; exit 1; }
+source "./example-metrics_emitter/start_example_emitter_server.sh" "${MODE}" || { echo "Failed to start example metrics emitter"; exit 1; }
 
 #TODO IMPLEMENT rest
 

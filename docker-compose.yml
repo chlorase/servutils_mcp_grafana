@@ -6,32 +6,35 @@ services:
     image: grafana/grafana:latest
     container_name: ${PROJECT_PREFIX}_grafana
     environment:
-      - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER}
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER} # Note of .yml files only docker-compose.yml by default auto reads from .env. Don't try this by default in other .ymls!
       - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD}
     ports:
       - "${GRAFANA_PORT}:${GRAFANA_PORT}" # host_port:container_port. For easy configuring and consistency just specifying conainer_port to be same. If conflicts you could change it to some other hardcoded value.
+    depends_on:
+      - loki
+      - prometheus
     volumes:
       - grafana-storage:/var/lib/grafana
 
   prometheus:
     image: prom/prometheus:latest
-    container_name: ${PROJECT_PREFIX}_prometheus
+    container_name: servutils_mcp_grafana_prometheus_container
     ports:
       - "${PROMETHEUS_PORT}:${PROMETHEUS_PORT}"
     volumes:
       - prometheus-storage:/prometheus
       - ./grafana/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-      - ./example-metrics_emitter/provisioning/prometheus/prometheus.yml:/etc/prometheus/example-metrics_emitter/prometheus.yml # Coupled to grafana/prometheus/prometheus.yml (see)
 
   loki:
-    image: grafana/loki:latest
+    image: grafana/loki:2.9.0 # Note: don't use 'latest' somehow latest may not be compatible currently.
     container_name: ${PROJECT_PREFIX}_loki
     ports:
       - "${LOKI_PORT}:${LOKI_PORT}"
 
-  grafana-mcp-server:
+  # grafana-mcp-server (official grafana packaged server)
+  mcp_server:
     image: grafana/mcp:latest
-    container_name: ${PROJECT_PREFIX}_mcp-server
+    container_name: servutils_mcp_grafana_mcp_server_container
     ports:
       - "${GRAFANA_MCP_PORT}:${GRAFANA_MCP_PORT}"
     environment:
@@ -39,13 +42,17 @@ services:
       - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER}
       - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD}
     depends_on:
+      - prometheus
       - grafana
 
-  example-metrics_emitter:
+  example_metrics_emitter_servicename:
     build: ./example-metrics_emitter
-    container_name: ${PROJECT_PREFIX}_example-metrics
+    container_name: example_metrics_container
     ports:
       - "${EXAMPLE_METRICS_EMITTER_PORT}:${EXAMPLE_METRICS_EMITTER_PORT}"  # host_port:container_port
+    depends_on:
+      - prometheus
+      - grafana
 
 volumes:
   grafana-storage:
