@@ -4,7 +4,7 @@
 services:
   grafana:
     image: grafana/grafana:latest
-    container_name: servutils_mcp_grafana_grafana
+    container_name: ${PROJECT_PREFIX}_grafana
     environment:
       - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER}
       - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD}
@@ -15,7 +15,7 @@ services:
 
   prometheus:
     image: prom/prometheus:latest
-    container_name: servutils_mcp_grafana_prometheus
+    container_name: ${PROJECT_PREFIX}_prometheus
     ports:
       - "${PROMETHEUS_PORT}:${PROMETHEUS_PORT}"
     volumes:
@@ -24,13 +24,13 @@ services:
 
   loki:
     image: grafana/loki:latest
-    container_name: servutils_mcp_grafana_loki
+    container_name: ${PROJECT_PREFIX}_loki
     ports:
       - "${LOKI_PORT}:${LOKI_PORT}"
 
   grafana-mcp-server:
     image: grafana/mcp:latest
-    container_name: servutils_mcp_grafana_mcp-server
+    container_name: ${PROJECT_PREFIX}_mcp-server
     ports:
       - "${GRAFANA_MCP_PORT}:${GRAFANA_MCP_PORT}"
     environment:
@@ -42,7 +42,7 @@ services:
 
   example-metrics:
     build: ./example-metrics-logs_emitter
-    container_name: servutils_mcp_grafana_example-metrics
+    container_name: ${PROJECT_PREFIX}_example-metrics
     ports:
       - "${EXAMPLE_METRICS_PORT}:${EXAMPLE_METRICS_PORT}"  # host_port:container_port
 
@@ -53,4 +53,4 @@ volumes:
 # Just to have an explicit predictable name to find (rather than relying on Docker's auto-gen'd name that'd be same as containing folder):
 networks:
   default:
-    name: servutils_mcp_grafana
+    name: ${PROJECT_PREFIX}

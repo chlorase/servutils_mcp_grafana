@@ -5,4 +5,4 @@ global:
 scrape_configs:
   - job_name: 'example-metrics'
     static_configs:
-      - targets: ['servutils_mcp_grafana_example-metrics:${EXAMPLE_METRICS_PORT}']
+      - targets: ['${PROJECT_PREFIX}_example-metrics:${EXAMPLE_METRICS_PORT}']

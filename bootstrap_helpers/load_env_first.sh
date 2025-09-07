@@ -1,4 +1,9 @@
 #!/bin/bash
-# Common helper to load all .env vars to local environment. Call this before referencing any of the variables in other scripts.
+# Load environment variables from .env file
 
-export $(grep -v '^#' ".env" | xargs)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Load environment variables
+set +u
+source "$SCRIPT_DIR/../.env"
+set -u
