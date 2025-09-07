@@ -1,18 +1,17 @@
-#TODO: Fixup and implement this completely, namings and paths etc  need fixups:
 #!/usr/bin/env bash
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Load environment variables
-export $(grep -v '^#' "$SCRIPT_DIR/../../env/.env" | xargs)
+source "$SCRIPT_DIR/../bootstrap_helpers/load_env_first.sh"
 
 DASHBOARD_JSON_FILE="$SCRIPT_DIR/../../provisioning/dashboards/example-metrics_dashboard.json"
-TIME_SERIES_FILE="$SCRIPT_DIR/servutils_example_metrics.prom"
+TIME_SERIES_FILE="$SCRIPT_DIR/${PROJECT_PREFIX}_example-metrics.prom"
+EXAMPLE_METRICS_EMITTER_CONTAINER="${PROJECT_PREFIX}_example-metrics"
+EXAMPLE_METRICS_EMITTER_SERVICE="example-metrics-logs-emitter"
 
-# -----------------------------
 # Generate example metrics
-# -----------------------------
 echo "Generating example metrics..."
 NOW=$(date +%s)
 START=$((NOW - 7200))  # 2 hours ago
@@ -23,20 +22,18 @@ for TS in $(seq $START 1 $NOW); do
     CPU_VALUE=$((50 + RANDOM % 50))
     MEM_VALUE=$((50 + RANDOM % 200))
 
-    echo "exampleMetricA{instance=\"servutils_example-metrics:8001\"} $EXAMPLE_VALUE $TS" >> "$TIME_SERIES_FILE"
-    echo "example_cpu_usage{instance=\"servutils_example-metrics:8001\"} $CPU_VALUE $TS" >> "$TIME_SERIES_FILE"
-    echo "example_memory_usage{instance=\"servutils_example-metrics:8001\"} $MEM_VALUE $TS" >> "$TIME_SERIES_FILE"
+    echo "exampleMetricA{instance=\"${EXAMPLE_METRICS_EMITTER_CONTAINER}:${EXAMPLE_METRICS_EMITTER_PORT}\"} $EXAMPLE_VALUE $TS" >> "$TIME_SERIES_FILE"
+    echo "example_cpu_usage{instance=\"${EXAMPLE_METRICS_EMITTER_CONTAINER}:${EXAMPLE_METRICS_EMITTER_PORT}\"} $CPU_VALUE $TS" >> "$TIME_SERIES_FILE"
+    echo "example_memory_usage{instance=\"${EXAMPLE_METRICS_EMITTER_CONTAINER}:${EXAMPLE_METRICS_EMITTER_PORT}\"} $MEM_VALUE $TS" >> "$TIME_SERIES_FILE"
 done
 
 echo "Example metrics generated at $TIME_SERIES_FILE"
 
 # Copy metrics to Prometheus container (ensure container is rebuilt if needed)
-docker compose up -d --build example-metrics
-docker cp "$TIME_SERIES_FILE" "${PROM_CONTAINER:-servutils_prometheus}":/tmp/servutils_example_metrics.prom
+docker compose up -d --build ${EXAMPLE_METRICS_EMITTER_SERVICE}
+docker cp "$TIME_SERIES_FILE" "${EXAMPLE_METRICS_EMITTER_CONTAINER}":/tmp/${EXAMPLE_METRICS_EMITTER_CONTAINER}.prom
 
-# -----------------------------
 # Create dashboard JSON
-# -----------------------------
 DASHBOARD_JSON=$(jq -n --arg title "Example Metrics Dashboard" '
 {
   "dashboard": {
@@ -73,9 +70,9 @@ PANEL=$(jq -n --argjson panelId 1 '
   },
   "options": { "legend": { "displayMode": "list" }, "tooltip": { "mode": "single" } },
   "targets": [
-    { "expr": "exampleMetricA{instance=\"servutils_example-metrics:8001\"}", "legendFormat": "ExampleMetricA", "refId": "A" },
-    { "expr": "example_cpu_usage{instance=\"servutils_example-metrics:8001\"}", "legendFormat": "CPU", "refId": "B" },
-    { "expr": "example_memory_usage{instance=\"servutils_example-metrics:8001\"}", "legendFormat": "Mem", "refId": "C" }
+    { "expr": "exampleMetricA{instance=\"${EXAMPLE_METRICS_EMITTER_CONTAINER}:${EXAMPLE_METRICS_EMITTER_PORT}\"}", "legendFormat": "ExampleMetricA", "refId": "A" },
+    { "expr": "example_cpu_usage{instance=\"${EXAMPLE_METRICS_EMITTER_CONTAINER}:${EXAMPLE_METRICS_EMITTER_PORT}\"}", "legendFormat": "CPU", "refId": "B" },
+    { "expr": "example_memory_usage{instance=\"${EXAMPLE_METRICS_EMITTER_CONTAINER}:${EXAMPLE_METRICS_EMITTER_PORT}\"}", "legendFormat": "Mem", "refId": "C" }
   ],
   "datasource": "Prometheus"
 }
@@ -87,11 +84,8 @@ DASHBOARD_JSON=$(echo "$DASHBOARD_JSON" | jq --argjson panel "$PANEL" '.dashboar
 echo "$DASHBOARD_JSON" | jq '.' > "$DASHBOARD_JSON_FILE"
 echo "Updated dashboard JSON saved to $DASHBOARD_JSON_FILE"
 
-# -----------------------------
 # Upload dashboard to Grafana
-# -----------------------------
-GRAFANA_URL="http://localhost:${GRAFANA_PORT}"
-GRAFANA_URL_ADMINACCESS="http://${GRAFANA_ADMIN_USER}:${GRAFANA_ADMIN_PASSWORD}@localhost:${GRAFANA_PORT}"
+GRAFANA_URL_ADMINACCESS="http://${GRAFANA_ADMIN_USER}:${GRAFANA_ADMIN_PASSWORD}@${GRAFANA_HOST:-localhost}:${GRAFANA_PORT}"
 
 echo "Grafana URL for dashboard upload: $GRAFANA_URL"
 echo "Grafana username: $GRAFANA_ADMIN_USER"
@@ -119,9 +113,7 @@ while true; do
     fi
 done
 
-# -----------------------------
 # Open dashboard in browser
-# -----------------------------
 DASHBOARD_URL="$GRAFANA_URL/d/example-dashboard/example-metrics-dashboard?orgId=1&from=now-6m&to=now&timezone=utc&refresh=30s"
 echo "Opening Grafana example dashboard: $DASHBOARD_URL"
 case "$OSTYPE" in

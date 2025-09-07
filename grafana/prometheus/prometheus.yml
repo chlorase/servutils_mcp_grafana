@@ -1,0 +1,11 @@
+global:
+  scrape_interval: 5s
+
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['${PROJECT_PREFIX}_prometheus:${PROMETHEUS_PORT}']  # container hostname + internal port
+  # Note Including by default the sample metrics is done via the ../grafana/prometheus/prometheus.yml, and docker-compose.yml (coupled)
+  - file_sd_configs:
+    - files:
+      - /etc/prometheus/example-metrics-logs_emitter/prometheus.yml

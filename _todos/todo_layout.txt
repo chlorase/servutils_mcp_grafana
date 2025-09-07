@@ -1,10 +1,9 @@
 servutils_mcp_grafana/
 
 |- bootstrap_helpers/
-__|- load_env_first.sh
 __|- ensure_docker_running.sh
-__|- get_docker_compressor.sh
 __|- get_docker_compose_cmd.sh
+__|- load_env_first.sh
 __|- wait_for_specified_services.sh
 
 |- example-metrics-logs_emitter/
@@ -12,7 +11,8 @@ __|- create_example_dashboards.sh
 __|- Dockerfile
 __|- example-logs_emitter.py
 __|- example-metrics_emitter.py
-__|- prometheus.yml
+__|- prometheus.yaml    (metics specific for the example-metrics_emitter.py)
+__|- requirements.txt
 __|- start_example_emitter_servers.sh
 
 |- grafana/
@@ -20,8 +20,8 @@ __|- loki/
 ____|- Dockerfile
 ____|- start.sh
 __|- prometheus/
-____|- Dockerfile
-____|- start.sh
+____|- prometheus.yml  (basic metrics)
+____|- start_prometheus_server.sh
 __|- tempo/
 ____|- Dockerfile
 ____|- start.sh

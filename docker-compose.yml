@@ -20,7 +20,9 @@ services:
       - "${PROMETHEUS_PORT}:${PROMETHEUS_PORT}"
     volumes:
       - prometheus-storage:/prometheus
-      - ./example-metrics-logs_emitter/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./grafana/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./example-metrics-logos_emitter/prometheus.yml:/etc/prometheus/example-metrics-logs_emitter.yml
+  #command: --config.file=/etc/prometheus/prometheus.yml --config.file=/etc/prometheus/example-metrics-logs_emitter.yml
 
   loki:
     image: grafana/loki:latest
@@ -40,11 +42,11 @@ services:
     depends_on:
       - grafana
 
-  example-metrics:
+  example-metrics-logs-emitter:
     build: ./example-metrics-logs_emitter
     container_name: ${PROJECT_PREFIX}_example-metrics
     ports:
-      - "${EXAMPLE_METRICS_PORT}:${EXAMPLE_METRICS_PORT}"  # host_port:container_port
+      - "${EXAMPLE_METRICS_EMITTER_PORT}:${EXAMPLE_METRICS_EMITTER_PORT}"  # host_port:container_port
 
 volumes:
   grafana-storage:

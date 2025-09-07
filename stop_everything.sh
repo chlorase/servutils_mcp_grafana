@@ -18,7 +18,7 @@ docker ps -a --format '{{.Names}}' | grep '^${PROJECT_PREFIX}' | xargs -r docker
 # -----------------------------
 # Optionally remove volumes (uncomment if full reset desired)
 # -----------------------------
-# echo "Removing all servutils volumes..."
+# echo "Removing all ${PROJECT_PREFIX} volumes..."
 # docker volume ls -q | grep '${PROJECT_PREFIX}' | xargs -r docker volume rm || true
 
 # -----------------------------

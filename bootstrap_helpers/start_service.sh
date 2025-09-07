@@ -20,12 +20,16 @@ else
     if docker inspect -f '{{.State.Running}}' "${CONTAINER_NAME}" | grep -q "true"; then
       echo "$SERVICE_NAME service is already up and running."
     else
+      echo "Starting service $SERVICE_NAME for container..."
       $COMPOSE_CMD up -d "${SERVICE_NAME}"
     fi
   else
+    echo "Starting service $SERVICE_NAME..."
     $COMPOSE_CMD up -d "${SERVICE_NAME}"
   fi
 fi
+echo "Service $SERVICE_NAME started."
+
 
 if [ $? -eq 0 ]; then
   # Wait for service to be up
