@@ -9,7 +9,7 @@ source "$SCRIPT_DIR/../bootstrap_helpers/load_env_first.sh"
 DASHBOARD_JSON_FILE="$SCRIPT_DIR/../../provisioning/dashboards/example-metrics_dashboard.json"
 TIME_SERIES_FILE="$SCRIPT_DIR/${PROJECT_PREFIX}_example-metrics.prom"
 EXAMPLE_METRICS_EMITTER_CONTAINER="${PROJECT_PREFIX}_example-metrics"
-EXAMPLE_METRICS_EMITTER_SERVICE="example-metrics-logs-emitter"
+EXAMPLE_METRICS_EMITTER_SERVICE="example-metrics_emitter"
 
 # Generate example metrics
 echo "Generating example metrics..."

@@ -6,8 +6,8 @@ __|- get_docker_compose_cmd.sh
 __|- load_env_first.sh
 __|- wait_for_specified_services.sh
 
-|- example-metrics-logs_emitter/
-__|- create_example_dashboards.sh
+|- example-metrics_emitter/
+__|- create_example_dashboard.sh
 __|- Dockerfile
 __|- example-logs_emitter.py
 __|- example-metrics_emitter.py

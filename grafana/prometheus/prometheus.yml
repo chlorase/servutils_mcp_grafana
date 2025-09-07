@@ -8,4 +8,4 @@ scrape_configs:
   # Note Including by default the sample metrics is done via the ../grafana/prometheus/prometheus.yml, and docker-compose.yml (coupled)
   - file_sd_configs:
     - files:
-      - /etc/prometheus/example-metrics-logs_emitter/prometheus.yml
+      - /etc/prometheus/example-metrics_emitter/prometheus.yml
