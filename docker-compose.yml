@@ -21,7 +21,7 @@ services:
     volumes:
       - prometheus-storage:/prometheus
       - ./grafana/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-      - ./example-metrics_emitter/prometheus.yml:/etc/prometheus/example-metrics_emitter.yml
+      - ./example-metrics_emitter/provisioning/prometheus/prometheus.yml:/etc/prometheus/example-metrics_emitter/prometheus.yml # Coupled to grafana/prometheus/prometheus.yml (see)
 
   loki:
     image: grafana/loki:latest
