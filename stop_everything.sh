@@ -1,7 +1,7 @@
 #!/bin/bash
 # Stops and removes all Docker containers associated with this project,
 # optionally removes volumes, and cleans up the network.
-# PRE: the prefixes of all your containers in this project, as specified in docker-compose.yml use a same '${PROJECT_PREFIX}'.
+# PRE: the prefixes of all your containers in this project, as specified in docker-compose.yml use a same 'servutils_mcp_grafana'.
 set -euo pipefail
 
 PROJECT_PREFIX=${PROJECT_PREFIX:-servutils_mcp_grafana}

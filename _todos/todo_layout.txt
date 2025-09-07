@@ -10,11 +10,14 @@ __|- wait_for_specified_services.sh
 |- example_metrics_emitter/
 __|- provisioning/
 _____|- grafana/
-________|- datasources.yml
-________|- example-metrics-dashboard.yml
+________|- dashboards
+___________|- example-metrics-dashboard.yml
+________|- datasources/
+___________|- datasources.yml
 __|- create_example_dashboard.sh
 __|- Dockerfile
 __|- example_metrics_emitter.py
+__|- open_example_dashboard.sh
 __|- requirements.txt
 __|- start_example_emitter_server.sh
 

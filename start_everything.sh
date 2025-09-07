@@ -5,6 +5,19 @@ set -euo pipefail
 
 MODE=${1:-up}  # default 'up', can also pass 'restart'
 
+if [ "$MODE" == "restart" ]; then
+    echo "Stopping all containers..."
+    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    "$SCRIPT_DIR/stop_everything.sh"
+
+    echo removing extra local dirs to clear grafana
+    rm -rf ./grafana-data
+    rm -rf ./wal
+    rm -rf ./loki-chunks
+    rm -rf ./loki-config.yaml
+    rm -rf ./loki-index
+fi
+
 # Start Grafana server
 source "./grafana/start_grafana_server.sh" "${MODE}" || { echo "Failed to start Grafana server"; exit 1; }
 

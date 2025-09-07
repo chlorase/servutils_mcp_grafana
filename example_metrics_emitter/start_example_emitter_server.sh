@@ -1,6 +1,9 @@
 #!/bin/bash
 set -euo pipefail
 
+# This script starts the Example Metrics Emitter service and waits for Prometheus to scrape metrics.
+# It also creates an example dashboard in Grafana if the service is restarted.
+
 # Load environment variables, ensure Docker is running
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/../bootstrap_helpers/load_env_first.sh"
@@ -8,10 +11,17 @@ source "$SCRIPT_DIR/../bootstrap_helpers/ensure_docker_running.sh"
 
 MODE=${1:-up}  # default 'up', can also pass 'restart'
 
-echo Starting Example Metrics Emitter: 
-_cmd=source "$SCRIPT_DIR/../bootstrap_helpers/start_service.sh" "example_metrics_emitter_servicename" "example_metrics_container" "${MODE}"
+echo "Starting Example Metrics Emitter in mode: $MODE"
+
+# Start the Example Metrics Emitter service
+echo "Starting service..."
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+_cmd="source $SCRIPT_DIR/../bootstrap_helpers/start_service.sh example_metrics_emitter_servicename example_metrics_container $MODE"
+echo "Running command: $_cmd"
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/../bootstrap_helpers/start_service.sh" "example_metrics_emitter_servicename" "example_metrics_container" "${MODE}"
-echo Example Metrics Emitter started.
+echo "Example Metrics Emitter started."
 
 if [ "$MODE" == "restart" ]; then
     # Wait for Prometheus to scrape at least one metric from example_metrics
@@ -28,17 +38,14 @@ if [ "$MODE" == "restart" ]; then
         [ $SECONDS -ge $END_SCRAPE ] && { echo "Timeout waiting for Prometheus to scrape example_metrics"; break; }
         sleep 2
     done
+    
     # Create example dashboard (with retry)
+    echo "Creating example dashboard..."
     SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
     "$SCRIPT_DIR/create_example_dashboard.sh"
+    echo "Example dashboard created."
 else
     # Open Grafana dashboard URL
-    DASHBOARD_URL="$GRAFANA_URL/dashboards"
-    echo "Opening existing Grafana dashboards in browser..."
-    case "$OSTYPE" in
-      darwin*) /Applications/Microsoft\ Edge.app/Contents/MacOS/Microsoft\ Edge "$DASHBOARD_URL" ;;
-      linux*) xdg-open "$DASHBOARD_URL" >/dev/null 2>&1 || true ;;
-      msys*|cygwin*) start "$DASHBOARD_URL" ;;
-    esac
-    echo "Grafana ready at: $GRAFANA_URL"
+    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    source "$SCRIPT_DIR/open_example_dashboard.sh"
 fi

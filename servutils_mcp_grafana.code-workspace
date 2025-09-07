@@ -10,7 +10,6 @@
 			"*.bak": true,
 			"**/__pycache__": true,
 			"**/*.bak": true,
-			"**/*.prom": true,
 			"**/tmp": true,
 			"grafana-data": true,
 			"loki-chunks": true,

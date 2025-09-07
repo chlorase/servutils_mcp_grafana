@@ -1,10 +1,11 @@
 # Just to avoid warnings in the cmdline log, can just remove  the first line here about the 
 # 'version: 3.8', as  modern Docker Compose ignores it anyhow:
 # version: '3.8'
+
 services:
   grafana:
     image: grafana/grafana:latest
-    container_name: ${PROJECT_PREFIX}_grafana
+    container_name: servutils_mcp_grafana_container
     environment:
       - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER} # Note of .yml files only docker-compose.yml by default auto reads from .env. Don't try this by default in other .ymls!
       - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD}
@@ -14,9 +15,10 @@ services:
       - loki
       - prometheus
     volumes:
-      - grafana-storage:/var/lib/grafana
       # If not using examples, comment these out. Coupled to example metrics service's datasources and dashboards.
-      - ./example_metrics_emitter/provisioning/grafana:/etc/provisioning/grafana #Grafana automatically knows how to pick these up locally to make available as dashboard with the file names in urls, and as available datasources
+      - ./example_metrics_emitter/provisioning/grafana/datasources:/etc/grafana/provisioning/datasources #Grafana automatically knows how to pick these up locally to make available as dashboard with the file names in urls, and as available datasources
+      - ./example_metrics_emitter/provisioning/grafana/dashboards:/etc/grafana/provisioning/dashboards #Grafana automatically knows how to pick these up locally to make available as dashboard with the file names in urls, and as available datasources
+      - ./grafana-data:/var/lib/grafana  # persistent Grafana DB, this line here just to avoid warns in cmd line log
 
   prometheus:
     image: prom/prometheus:latest
@@ -24,12 +26,11 @@ services:
     ports:
       - "${PROMETHEUS_PORT}:${PROMETHEUS_PORT}"
     volumes:
-      - prometheus-storage:/prometheus
       - ./grafana/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
 
-  loki:
-    image: grafana/loki:2.9.0 # Note: don't use 'latest' somehow latest may not be compatible currently.
-    container_name: ${PROJECT_PREFIX}_loki
+  loki: # Note: don't use 'latest' somehow latest may not be compatible currently:
+    image: grafana/loki:2.9.0
+    container_name: servutils_mcp_grafana_loki
     ports:
       - "${LOKI_PORT}:${LOKI_PORT}"
 
@@ -43,24 +44,19 @@ services:
       - GRAFANA_URL=${GRAFANA_URL}
       - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER}
       - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD}
+    restart: unless-stopped
     depends_on:
       - prometheus
       - grafana
 
   example_metrics_emitter_servicename: # note, to work, coupled to grafana service's volumes adding the datasources and dashboards.
-    build: ./example_metrics_emitter
+    build:
+      context: ./example_metrics_emitter
     container_name: example_metrics_container
     ports:
       - "${EXAMPLE_METRICS_EMITTER_PORT}:${EXAMPLE_METRICS_EMITTER_PORT}"  # host_port:container_port
-    depends_on:
-      - prometheus
-      - grafana
-
-volumes:
-  grafana-storage:
-  prometheus-storage:
 
 # Just to have an explicit predictable name to find (rather than relying on Docker's auto-gen'd name that'd be same as containing folder):
 networks:
   default:
-    name: ${PROJECT_PREFIX}
+    name: servutils_mcp_grafana

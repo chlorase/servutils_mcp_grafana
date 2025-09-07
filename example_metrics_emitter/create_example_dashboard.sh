@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
+# This script generates example metrics, creates a dashboard JSON file, and uploads it to Grafana.
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
 # Load environment variables
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/../bootstrap_helpers/load_env_first.sh"
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-DASHBOARD_JSON_FILE="$SCRIPT_DIR/provisioning/grafana/example-metrics-dashboard.json"
-TIME_SERIES_FILE="$SCRIPT_DIR/provisioning/grafana/temp_example_metrics.prom"
+DASHBOARD_JSON_FILE="$SCRIPT_DIR/provisioning/grafana/dashboards/example-metrics-dashboard.json"
+TIME_SERIES_FILE="$SCRIPT_DIR/provisioning/grafana/dashboards/temp_example_metrics.prom"
 EXAMPLE_METRICS_EMITTER_CONTAINERNAME="example_metrics_container"
 
 # Generate example metrics
@@ -30,10 +30,13 @@ done
 echo "Example metrics generated at $TIME_SERIES_FILE"
 
 # Copy metrics to Prometheus container (ensure container is rebuilt if needed)
-docker compose up -d --build "example_metrics_emitter_servicename"
+echo "Copying metrics to Prometheus container..."
+${COMPOSE_CMD} up -d --build "example_metrics_emitter_servicename"
 docker cp "$TIME_SERIES_FILE" "${EXAMPLE_METRICS_EMITTER_CONTAINERNAME}":/tmp/temp_example_metrics.prom
+echo "Metrics copied to Prometheus container."
 
 # Create dashboard JSON
+echo "Creating dashboard JSON..."
 DASHBOARD_JSON=$(jq -n --arg title "Example Metrics Dashboard" '
 {
   "dashboard": {
@@ -81,6 +84,7 @@ PANEL=$(jq -n --argjson panelId 1 \
 ')
 
 DASHBOARD_JSON=$(echo "$DASHBOARD_JSON" | jq --argjson panel "$PANEL" '.dashboard.panels += [$panel]')
+echo "Dashboard JSON created."
 
 # Write updated JSON back to provisioning folder
 echo "$DASHBOARD_JSON" | jq '.' > "$DASHBOARD_JSON_FILE"
@@ -115,11 +119,6 @@ while true; do
     fi
 done
 
-# Open dashboard in browser
-DASHBOARD_URL="$GRAFANA_URL/d/example-dashboard/example-metrics-dashboard?orgId=1&from=now-6m&to=now&timezone=utc&refresh=30s"
-echo "Opening Grafana example dashboard: $DASHBOARD_URL"
-case "$OSTYPE" in
-  darwin*) /Applications/Microsoft\ Edge.app/Contents/MacOS/Microsoft\ Edge "$DASHBOARD_URL" ;;
-  linux*) xdg-open "$DASHBOARD_URL" >/dev/null 2>&1 || true ;;
-  msys*|cygwin*) start "$DASHBOARD_URL" ;;
-esac
+# Open dashboard in browser (refactored to a function)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/open_example_dashboard.sh"
