@@ -8,21 +8,24 @@ source "$SCRIPT_DIR/../bootstrap_helpers/ensure_docker_running.sh"
 
 MODE=${1:-up}  # default 'up', can also pass 'restart'
 
+echo Starting Example Metrics Emitter: 
+_cmd=source "$SCRIPT_DIR/../bootstrap_helpers/start_service.sh" "example_metrics_emitter_servicename" "example_metrics_container" "${MODE}"
 source "$SCRIPT_DIR/../bootstrap_helpers/start_service.sh" "example_metrics_emitter_servicename" "example_metrics_container" "${MODE}"
+echo Example Metrics Emitter started.
 
 if [ "$MODE" == "restart" ]; then
-    # Wait for Prometheus to scrape at least one metric from example-metrics
+    # Wait for Prometheus to scrape at least one metric from example_metrics
     PROM_SCRAPE_TIMEOUT=${PROM_SCRAPE_TIMEOUT:-30}  # seconds, configurable in .env
-    echo "Waiting for Prometheus to scrape metrics from example-metrics..."
+    echo "Waiting for Prometheus to scrape metrics from example_metrics..."
     END_SCRAPE=$((SECONDS+PROM_SCRAPE_TIMEOUT))
     while true; do
         METRIC_COUNT=$(curl -s http://${PROMETHEUS_HOST:-localhost}:${PROMETHEUS_PORT}/metrics | grep -c '.')
         echo "Metrics scraped so far: $METRIC_COUNT"
         if [ "$METRIC_COUNT" -gt 0 ]; then
-            echo "Prometheus has scraped metrics from example-metrics."
+            echo "Prometheus has scraped metrics from example_metrics."
             break
         fi
-        [ $SECONDS -ge $END_SCRAPE ] && { echo "Timeout waiting for Prometheus to scrape example-metrics"; break; }
+        [ $SECONDS -ge $END_SCRAPE ] && { echo "Timeout waiting for Prometheus to scrape example_metrics"; break; }
         sleep 2
     done
     # Create example dashboard (with retry)

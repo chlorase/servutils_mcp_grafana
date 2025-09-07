@@ -3,7 +3,7 @@ TODOs:
 - server side access first basic setups:
     - graf, prometh
     >done
-    - relocate the prometheus.yml under example-metrics-logs_emitter/ to example-metrics-logs_emitter/provisioning/prometheus
+    - relocate the prometheus.yml under example_metrics-logs_emitter/ to example_metrics-logs_emitter/provisioning/prometheus
     >done
 
     - fix all .yml filees cannot reference .env vars.
@@ -11,23 +11,23 @@ TODOs:
     - bleh delete  examples copy of the prometheus.yml
     >done
 
-    - split example-metrics_emitter into 2
-        - rename example-metrics_emitter -> example-metrics_emitter
+    - split example_metrics_emitter into 2
+        - rename example_metrics_emitter -> example_metrics_emitter
         >done
         - Fixup the 'PANEL'
-        - make common reference to example-metrics_emitter inside .env and use it
+        - make common reference to example_metrics_emitter inside .env and use it
 
-        - string search example-metrics throughout:
+        - string search example_metrics throughout:
             - employ:
             EXAMPLE_METRICS_EMITTER_PORT=8001
-            - Bleh delete: EXAMPLE_METRICS_EMITTER_SERVICENAME="example-metrics_emitter", replacewith simply example_metrics_emitter_servicename
+            - Bleh delete: EXAMPLE_METRICS_EMITTER_SERVICENAME="example_metrics_emitter", replacewith simply example_metrics_emitter_servicename
             >done
             - and also del EXAMPLE_METRICS_EMITTER_CONTAINERNAME , replace with simly 'example_metrics_container'
 
             - relocate the provisioning folder's contetnts
                 - example-metrics-dashbaord.yaml
                     - figure out where referenced, named. string replacements
-                - example-metrics-dashbaord.yaml
+                - example_metrics-dashbaord.yaml
                     - figure out where referenced, named. string replacements
 
         - for now dont make the logs emitter at ALL. delete remaining 'logs' refs

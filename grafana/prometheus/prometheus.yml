@@ -5,6 +5,6 @@ scrape_configs:
     static_configs:
       - targets: ['servutils_mcp_grafana_prometheus_container:9090'] # Coupled to docker-compose.yml values
   # Examples loaded by default (comment out if you are not running local Examples)
-  - job_name: 'example-metrics'
+  - job_name: 'example_metrics'
     static_configs:
       - targets: ['example_metrics_container:8001'] # Coupled to docker-compose.yml values

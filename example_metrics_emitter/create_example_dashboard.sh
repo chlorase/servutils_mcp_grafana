@@ -8,7 +8,7 @@ source "$SCRIPT_DIR/../bootstrap_helpers/load_env_first.sh"
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DASHBOARD_JSON_FILE="$SCRIPT_DIR/provisioning/grafana/example-metrics-dashboard.json"
-TIME_SERIES_FILE="$SCRIPT_DIR/provisioning/grafana/temp_example-metrics.prom"
+TIME_SERIES_FILE="$SCRIPT_DIR/provisioning/grafana/temp_example_metrics.prom"
 EXAMPLE_METRICS_EMITTER_CONTAINERNAME="example_metrics_container"
 
 # Generate example metrics
@@ -31,7 +31,7 @@ echo "Example metrics generated at $TIME_SERIES_FILE"
 
 # Copy metrics to Prometheus container (ensure container is rebuilt if needed)
 docker compose up -d --build "example_metrics_emitter_servicename"
-docker cp "$TIME_SERIES_FILE" "${EXAMPLE_METRICS_EMITTER_CONTAINERNAME}":/tmp/${EXAMPLE_METRICS_EMITTER_CONTAINERNAME}.prom
+docker cp "$TIME_SERIES_FILE" "${EXAMPLE_METRICS_EMITTER_CONTAINERNAME}":/tmp/temp_example_metrics.prom
 
 # Create dashboard JSON
 DASHBOARD_JSON=$(jq -n --arg title "Example Metrics Dashboard" '

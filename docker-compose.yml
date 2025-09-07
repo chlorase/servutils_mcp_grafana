@@ -15,6 +15,8 @@ services:
       - prometheus
     volumes:
       - grafana-storage:/var/lib/grafana
+      # If not using examples, comment these out. Coupled to example metrics service's datasources and dashboards.
+      - ./example_metrics_emitter/provisioning/grafana:/etc/provisioning/grafana #Grafana automatically knows how to pick these up locally to make available as dashboard with the file names in urls, and as available datasources
 
   prometheus:
     image: prom/prometheus:latest
@@ -45,8 +47,8 @@ services:
       - prometheus
       - grafana
 
-  example_metrics_emitter_servicename:
-    build: ./example-metrics_emitter
+  example_metrics_emitter_servicename: # note, to work, coupled to grafana service's volumes adding the datasources and dashboards.
+    build: ./example_metrics_emitter
     container_name: example_metrics_container
     ports:
       - "${EXAMPLE_METRICS_EMITTER_PORT}:${EXAMPLE_METRICS_EMITTER_PORT}"  # host_port:container_port

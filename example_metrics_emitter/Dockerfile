@@ -15,11 +15,11 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the application code
-COPY example-metrics_emitter.py .
+COPY example_metrics_emitter.py .
 
 # Install any dependencies (Flask is needed for the HTTP server)
 RUN pip install flask
 RUN pip install --no-cache-dir --no-warn-script-location flask prometheus_client
 
 # Run the script when the container starts
-CMD ["python", "example-metrics_emitter.py"]
+CMD ["python", "example_metrics_emitter.py"]
