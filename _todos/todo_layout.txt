@@ -13,7 +13,7 @@ _____|- grafana/
 ________|- dashboards
 ___________|- example-metrics-dashboard.yml
 ________|- datasources/
-___________|- datasources.yml
+___________|- prometheus_datasource.yml
 __|- create_example_dashboard.sh
 __|- Dockerfile
 __|- example_metrics_emitter.py

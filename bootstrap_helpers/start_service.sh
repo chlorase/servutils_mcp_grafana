@@ -14,8 +14,12 @@ source "$SCRIPT_DIR/get_docker_compose_cmd.sh"
 
 if [ "$MODE" == "restart" ]; then
   echo "Restarting $SERVICE_NAME container..."
+  if docker ps -a --format '{{.Names}}' | grep -q "$CONTAINER_NAME"; then
+    docker stop "$CONTAINER_NAME" || true
+    docker rm "$CONTAINER_NAME" || true
+  fi
   $COMPOSE_CMD rm -f "${SERVICE_NAME}" || true
-  $COMPOSE_CMD up -d "${SERVICE_NAME}"
+  $COMPOSE_CMD up -d "$SERVICE_NAME"
 else
   if docker ps -a --format '{{.Names}}' | grep -q "${CONTAINER_NAME}"; then
     if docker inspect -f '{{.State.Running}}' "${CONTAINER_NAME}" | grep -q "true"; then

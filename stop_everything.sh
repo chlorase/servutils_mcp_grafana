@@ -4,7 +4,7 @@
 # PRE: the prefixes of all your containers in this project, as specified in docker-compose.yml use a same 'servutils_mcp_grafana'.
 set -euo pipefail
 
-PROJECT_PREFIX=${PROJECT_PREFIX:-servutils_mcp_grafana}
+PROJECT_PREFIX="servutils_mcp_grafana"
 
 # Load environment variables
 ./bootstrap_helpers/load_env_first.sh

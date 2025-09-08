@@ -114,7 +114,7 @@ while true; do
         RETRY_COUNT=$((RETRY_COUNT + 1))
         if [ $RETRY_COUNT -ge $MAX_RETRIES ]; then
             echo "Max retries reached. Dashboard not uploaded."
-            break
+            exit 1
         fi
     fi
 done
