@@ -6,3 +6,5 @@ Grafana's Tempo is for tracing requests through MCP flow.
 
 Prometheus is for the MCP metrics resource.
 Prometheus is the Grafana Metrics solution, scrapes metrics and put into grafana server (a go between from a metrics emitting source, and grafana).
+
+GrafanaMCP is a package sitting in front of Grafana server, exposing MCP-tooling to LLMs.

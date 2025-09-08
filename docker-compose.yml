@@ -33,21 +33,29 @@ services:
     container_name: servutils_mcp_loki_container
     ports:
       - "${LOKI_PORT}:${LOKI_PORT}"
+    command: -config.file=/etc/loki/loki-config.yml
+    volumes:
+      - ./loki-config.yml:/etc/loki/loki-config.yml
 
-  # grafana-mcp-server (official grafana packaged server)
-  mcp_server:
-    image: grafana/mcp:latest
+  # mcp-grafana aka 'Grafana MCP (Server)'  (Official Grafana product for expose your grafana server to LLMs: https://github.com/grafana/mcp-grafana)
+  grafanamcp:
+    image: mcp/grafana
     container_name: servutils_mcp_grafanamcp_container
     ports:
       - "${GRAFANA_MCP_PORT}:${GRAFANA_MCP_PORT}"
     environment:
       - GRAFANA_URL=${GRAFANA_URL}
-      - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER}
-      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD}
+      - GRAFANA_SERVICE_ACCOUNT_TOKEN=${GRAFANA_SERVICE_ACCOUNT_TOKEN}
     restart: unless-stopped
     depends_on:
       - prometheus
       - grafana
+    command: -t streamable-http -address :${GRAFANA_MCP_PORT}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "${GRAFANA_MCP_URL}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   example_metrics_emitter_servicename: # note, to work, coupled to grafana service's volumes adding the datasources and dashboards.
     build:

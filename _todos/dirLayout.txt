@@ -23,14 +23,13 @@ __|- start_example_emitter_server.sh
 
 |- grafana/
 __|- loki/
-____|- Dockerfile
 ____|- start.sh
 __|- prometheus/
 ____|- prometheus.yml  (basic metrics + metics specific for the example_metrics_emitter.py)
 ____|- start_prometheus_server.sh
-__|- tempo/
-____|- Dockerfile
-____|- start.sh
+__|- grafanamcp/
+____|- start_grafanamcp_server.sh
+____|- test_grafanamcp_server.sh
 __|- start_grafana_server.sh
 
 |- .env
