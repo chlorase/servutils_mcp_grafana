@@ -10,5 +10,5 @@ MODE=${1:-up}  # default 'up', can also pass 'restart'
 
 echo "Waiting for Prometheus to start..."
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "$SCRIPT_DIR/../../bootstrap_helpers/start_service.sh" "prometheus" "servutils_mcp_grafana_prometheus_container" "${MODE}"
+source "$SCRIPT_DIR/../../bootstrap_helpers/start_service.sh" "prometheus" "servutils_mcp_prometheus_container" "${MODE}"
 echo "Prometheus started."

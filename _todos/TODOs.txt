@@ -11,28 +11,13 @@ TODOs:
     - bleh delete  examples copy of the prometheus.yml
     >done
 
-    - split example_metrics_emitter into 2
-        - rename example_metrics_emitter -> example_metrics_emitter
-        >done
-        - Fixup the 'PANEL'
-        - make common reference to example_metrics_emitter inside .env and use it
+    - refactoring and get all prometheus, grafana working.
+    >done
+    - setup grafana gen fake data for now
+    >done
+    - basic mcp graf server setup and test.
 
-        - string search example_metrics throughout:
-            - employ:
-            EXAMPLE_METRICS_EMITTER_PORT=8001
-            - Bleh delete: EXAMPLE_METRICS_EMITTER_SERVICENAME="example_metrics_emitter", replacewith simply example_metrics_emitter_servicename
-            >done
-            - and also del EXAMPLE_METRICS_EMITTER_CONTAINERNAME , replace with simly 'example_metrics_container'
-
-            - relocate the provisioning folder's contetnts
-                - example-metrics-dashbaord.yaml
-                    - figure out where referenced, named. string replacements
-                - example_metrics-dashbaord.yaml
-                    - figure out where referenced, named. string replacements
-
-        - for now dont make the logs emitter at ALL. delete remaining 'logs' refs
-    - basic mcp graf srv
-    - setup grafana querying ability based off my samples, gen fake data for now
+- Hookup test LLM client
 
 
 - client/agent proxy

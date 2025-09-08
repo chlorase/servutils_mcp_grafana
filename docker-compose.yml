@@ -22,7 +22,7 @@ services:
 
   prometheus:
     image: prom/prometheus:latest
-    container_name: servutils_mcp_grafana_prometheus_container
+    container_name: servutils_mcp_prometheus_container
     ports:
       - "${PROMETHEUS_PORT}:${PROMETHEUS_PORT}"
     volumes:
@@ -30,14 +30,14 @@ services:
 
   loki: # Note: don't use 'latest' somehow latest may not be compatible currently:
     image: grafana/loki:2.9.0
-    container_name: servutils_mcp_grafana_loki
+    container_name: servutils_mcp_loki_container
     ports:
       - "${LOKI_PORT}:${LOKI_PORT}"
 
   # grafana-mcp-server (official grafana packaged server)
   mcp_server:
     image: grafana/mcp:latest
-    container_name: servutils_mcp_grafana_mcp_server_container
+    container_name: servutils_mcp_grafanamcp_container
     ports:
       - "${GRAFANA_MCP_PORT}:${GRAFANA_MCP_PORT}"
     environment:

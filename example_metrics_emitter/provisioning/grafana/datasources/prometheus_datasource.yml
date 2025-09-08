@@ -4,5 +4,5 @@ datasources:
   - name: Prometheus_main
     type: prometheus
     access: proxy
-    url: http://servutils_mcp_grafana_prometheus_container:9090 # Coupled to .env values
+    url: http://servutils_mcp_prometheus_container:9090 # Coupled to .env values
     isDefault: true
