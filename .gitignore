@@ -50,3 +50,5 @@ grafana-data/
 *.sqlite
 *.sqlite3
 
+.env.grafanamcp
+grafana/grafanamcp/test_mcp_dashboard_summary.json

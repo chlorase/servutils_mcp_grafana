@@ -5,7 +5,7 @@
   "dashboard": {
     "title": "My Dashboard",
     "url": "http://localhost:3000/d/my-dashboard/my-dashboard?orgId=1",
-    "created": "2025-09-13T22:16:54Z"
+    "created": "2025-09-13T22:36:11Z"
   },
   "notes": "This dashboard was created via MCP test script. You can use this file to summarize or extend dashboard metadata."
 }
