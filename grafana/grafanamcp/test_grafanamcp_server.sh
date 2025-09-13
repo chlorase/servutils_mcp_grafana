@@ -1,5 +1,10 @@
 #!/bin/bash
-# Test the Grafana MCP server
+# test_grafanamcp_server.sh: Test the Grafana MCP server
+
+echo "-------"
+echo ""
+echo "Running Script: ./${BASH_SOURCE[0]/#$(pwd)\//} $@"
+echo "Starting TESTS"
 
 # Load environment variables
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -7,21 +12,32 @@ source "$SCRIPT_DIR/../../bootstrap_helpers/load_env_first.sh"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/../../.env.grafanamcp"
 
+# PRE: the MCP server URL, should be in .env file:
+# GRAFANA_MCP_URL="http://localhost:${GRAFANA_MCP_PORT}/mcp"
+
 # List all tenants
 echo "Listing all tenants..."
-curl ${GRAFANA_MCP_URL}/tenants
+cmd=(curl ${GRAFANA_MCP_URL}/tenants)
+echo ".. Running command: ${cmd[@]}"
+"${cmd[@]}"
 
 # Create a new tenant
 echo "Creating a new tenant..."
-curl -X POST -H "Content-Type: application/json" -d '{"name": "my-tenant"}' ${GRAFANA_MCP_URL}/tenants
+cmd=(curl -X POST -H "Content-Type: application/json" -d "{\"name\": \"my-tenant\"}" ${GRAFANA_MCP_URL}/tenants)
+echo ".. Running command: ${cmd[@]}"
+"${cmd[@]}"
 
 # List all dashboards for the new tenant
 echo "Listing all dashboards for the new tenant..."
-curl ${GRAFANA_MCP_URL}/tenants/my-tenant/dashboards
+cmd=(curl ${GRAFANA_MCP_URL}/tenants/my-tenant/dashboards)
+echo ".. Running command: ${cmd[@]}"
+"${cmd[@]}"
 
 # Create a new dashboard for the new tenant
 echo "Creating a new dashboard for the new tenant..."
-curl -X POST -H "Content-Type: application/json" -d '{"title": "My Dashboard"}' ${GRAFANA_MCP_URL}/tenants/my-tenant/dashboards
+cmd=(curl -X POST -H "Content-Type: application/json" -d "{\"title\": \"My Dashboard\"}" ${GRAFANA_MCP_URL}/tenants/my-tenant/dashboards)
+echo ".. Running command: ${cmd[@]}"
+"${cmd[@]}"
 
 # Open the dashboard in the Grafana UI
 echo "Opening dashboard in Grafana UI..."
