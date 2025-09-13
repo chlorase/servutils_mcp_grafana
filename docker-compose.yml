@@ -39,7 +39,7 @@ services:
 
   # mcp-grafana aka 'Grafana MCP (Server)'  (Official Grafana product for expose your grafana server to LLMs: https://github.com/grafana/mcp-grafana)
   grafanamcp:
-    image: mcp/grafana
+    build: grafana/grafanamcp # path to folder containing Dockerfile
     container_name: servutils_mcp_grafanamcp_container
     ports:
       - "${GRAFANA_MCP_PORT}:${GRAFANA_MCP_PORT}"
@@ -50,7 +50,7 @@ services:
     depends_on:
       - prometheus
       - grafana
-    command: -t streamable-http -address :${GRAFANA_MCP_PORT}
+    command: -t streamable-http -address :${GRAFANA_MCP_PORT} -endpoint-path /mcp -log-level debug -enabled-tools admin
     healthcheck:
       test: ["CMD", "curl", "-f", "${GRAFANA_MCP_URL}"]
       interval: 10s

@@ -1,0 +1,1 @@
+./start_everything.sh restart

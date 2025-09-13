@@ -29,7 +29,19 @@ $cmd
 # Ensure created service account and token ..
 
 SERVICE_ACCOUNT_NAME="mcp-service-account"
-SERVICE_ACCOUNT_ROLE="Viewer"
+SERVICE_ACCOUNT_ROLE="Admin"
+# todo: update script to do this more controlled here like this:
+# Assign folder permissions (example: give Editor access to folder ID 1)
+#FOLDER_ID=1
+#PERMISSION_LEVEL=2  # 1=Viewer, 2=Editor, 4=Admin
+#echo "Assigning folder permissions to service account..."
+#cmd=(curl -v -s -m 10 -X POST -H "Content-Type: application/json" \
+#  -d "{\"items\": [{\"userId\": $SERVICE_ACCOUNT_ID, \"permission\": $PERMISSION_LEVEL}]}" \
+#  ${GRAFANA_URL}/api/folders/$FOLDER_ID/permissions \
+#  -u ${GRAFANA_ADMIN_USER}:${GRAFANA_ADMIN_PASSWORD})
+#echo "Running command: ${cmd[@]}"
+#"${cmd[@]}"
+
 TOKEN_NAME="mcp-service-account-token"
 
 echo "1st checking if service account exists..."

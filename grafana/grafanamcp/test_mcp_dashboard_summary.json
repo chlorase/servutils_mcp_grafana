@@ -1,0 +1,11 @@
+{
+  "grafana_url": "http://localhost:3000",
+  "mcp_endpoint": "http://localhost:8080/mcp",
+  "tenant": "my-tenant",
+  "dashboard": {
+    "title": "My Dashboard",
+    "url": "http://localhost:3000/d/my-dashboard/my-dashboard?orgId=1",
+    "created": "2025-09-13T22:16:54Z"
+  },
+  "notes": "This dashboard was created via MCP test script. You can use this file to summarize or extend dashboard metadata."
+}
