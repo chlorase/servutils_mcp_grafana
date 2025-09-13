@@ -4,6 +4,7 @@
 SERVICE_NAME=$1
 CONTAINER_NAME=$2
 MODE=${3:-up}  # default 'up', can also pass 'restart'
+echo "Running $(basename "${BASH_SOURCE[0]}")"
 echo "SERVICE_NAME: $SERVICE_NAME"
 echo "CONTAINER_NAME: $CONTAINER_NAME"
 echo "MODE: $MODE"

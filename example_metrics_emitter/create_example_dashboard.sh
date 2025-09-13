@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # This script generates example metrics, creates a dashboard JSON file, and uploads it to Grafana.
 set -euo pipefail
+echo "Running $(basename "${BASH_SOURCE[0]}")"
 
 # Load environment variables
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

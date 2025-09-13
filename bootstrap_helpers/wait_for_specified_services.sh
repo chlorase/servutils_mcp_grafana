@@ -1,5 +1,6 @@
 #!/bin/bash
 # Helper to wait for all current command input arg list of services, to be in running state (in your local docker)
+echo "Running $(basename "${BASH_SOURCE[0]}")"
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "${SCRIPT_DIR}/load_env_first.sh"

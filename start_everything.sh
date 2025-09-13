@@ -2,6 +2,7 @@
 # Starts Grafana, Prometheus, Loki, Promtail, example metrics outputter, MCP servers.
 # ensures Grafana admin password, creates example dashboard, and opens browser. #TODO IMPLEMENT all these
 set -euo pipefail
+echo "Running $(basename "${BASH_SOURCE[0]}")"
 
 MODE=${1:-up}  # default 'up', can also pass 'restart'
 

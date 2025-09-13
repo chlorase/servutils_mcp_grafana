@@ -1,5 +1,6 @@
 #!/bin/bash
 set -euo pipefail
+echo "Running $(basename "${BASH_SOURCE[0]}")"
 
 # Load environment variables, ensure Docker is running, and determine Docker Compose command
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
