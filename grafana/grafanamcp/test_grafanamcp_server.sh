@@ -6,6 +6,23 @@ echo ""
 echo "Running Script: ./${BASH_SOURCE[0]/#$(pwd)\//} $@"
 echo "Starting TESTS"
 
+echo "What we will be testing: "
+echo "│"
+echo "├── Checks Zed is installed"
+echo "│"
+echo "├── Creates dashboard summary JSON for Zed"
+echo "│   └── Used for metadata viewing (not dashboard creation)"
+echo "│"
+echo "├── Launches Zed with summary file"
+echo "│"
+echo "├── Calls create_example_dashboard_for_grafanamcp.sh"
+echo "│   └── Generates metrics, builds dashboard, uploads via API"
+echo "│"
+echo "├── Opens dashboard in browser"
+echo "│"
+echo "└── Verifies dashboard exists via curl + token"
+
+
 # Load environment variables
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/../../bootstrap_helpers/load_env_first.sh"
