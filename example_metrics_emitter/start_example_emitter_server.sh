@@ -1,6 +1,6 @@
 #!/bin/bash
 set -euo pipefail
-echo "Running $(basename "${BASH_SOURCE[0]}")"
+echo "Running Script: ./${BASH_SOURCE[0]/#$(pwd)\//} $@"
 
 # This script starts the Example Metrics Emitter service and waits for Prometheus to scrape metrics.
 # It also creates an example dashboard in Grafana if the service is restarted.

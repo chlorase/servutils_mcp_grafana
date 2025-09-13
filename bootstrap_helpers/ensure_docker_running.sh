@@ -1,7 +1,7 @@
 #!/bin/bash
 # Common helper to ensure local docker daemon running
 set -euo pipefail
-echo "Running $(basename "${BASH_SOURCE[0]}")"
+echo "Running Script: ./${BASH_SOURCE[0]/#$(pwd)\//} $@"
 
 if ! docker info >/dev/null 2>&1; then
     echo "Starting Docker Desktop..."

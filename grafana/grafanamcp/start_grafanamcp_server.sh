@@ -1,13 +1,19 @@
 #!/bin/bash
-# Start the Grafana MCP server
+# start_grafanamcp_server.sh: Start the Grafana MCP server
+
+echo "Running Script: ./${BASH_SOURCE[0]/#$(pwd)\//} $@"
 
 # Load environment variables
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "$SCRIPT_DIR/../../bootstrap_helpers/load_env_first.sh"
+cmd="source $SCRIPT_DIR/../../bootstrap_helpers/load_env_first.sh"
+echo "Running command: $cmd"
+$cmd
 
 # Determine Docker Compose command
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "$SCRIPT_DIR/../../bootstrap_helpers/get_docker_compose_cmd.sh"
+cmd="source $SCRIPT_DIR/../../bootstrap_helpers/get_docker_compose_cmd.sh"
+echo "Running command: $cmd"
+$cmd
 
 # Parse options
 MODE=${1:-up}
@@ -16,7 +22,9 @@ RUN_TESTS=${2:-true}
 # Start the MCP server
 echo "Starting Grafana MCP server in mode $MODE..."
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-"$SCRIPT_DIR/../../bootstrap_helpers/start_service.sh" grafanamcp servutils_mcp_grafanamcp_container "$MODE"
+cmd="$SCRIPT_DIR/../../bootstrap_helpers/start_service.sh grafanamcp servutils_mcp_grafanamcp_container $MODE"
+echo "Running command: $cmd"
+$cmd
 
 # Create a service account and token
 echo "Creating service account and token..."
@@ -25,11 +33,15 @@ SERVICE_ACCOUNT_ROLE="Viewer"
 TOKEN_NAME="mcp-service-account-token"
 
 # Create service account
-SERVICE_ACCOUNT_RESPONSE=$(curl -s -X POST -H "Content-Type: application/json" -d '{"name": "'"$SERVICE_ACCOUNT_NAME"'", "role": "'"$SERVICE_ACCOUNT_ROLE"'"}' ${GRAFANA_URL}/api/serviceaccounts -u ${GRAFANA_ADMIN_USER}:${GRAFANA_ADMIN_PASSWORD})
+cmd="curl -s -X POST -H \"Content-Type: application/json\" -d '{\"name\": \"$SERVICE_ACCOUNT_NAME\", \"role\": \"$SERVICE_ACCOUNT_ROLE\"}' ${GRAFANA_URL}/api/serviceaccounts -u ${GRAFANA_ADMIN_USER}:${GRAFANA_ADMIN_PASSWORD}"
+echo "Running command: $cmd"
+SERVICE_ACCOUNT_RESPONSE=$($cmd)
 SERVICE_ACCOUNT_ID=$(echo "$SERVICE_ACCOUNT_RESPONSE" | jq -r '.id')
 
 # Create token
-TOKEN_RESPONSE=$(curl -s -X POST -H "Content-Type: application/json" -d '{"name": "'"$TOKEN_NAME"'"}' ${GRAFANA_URL}/api/serviceaccounts/$SERVICE_ACCOUNT_ID/tokens -u ${GRAFANA_ADMIN_USER}:${GRAFANA_ADMIN_PASSWORD})
+cmd="curl -s -X POST -H \"Content-Type: application/json\" -d '{\"name\": \"$TOKEN_NAME\"}' ${GRAFANA_URL}/api/serviceaccounts/$SERVICE_ACCOUNT_ID/tokens -u ${GRAFANA_ADMIN_USER}:${GRAFANA_ADMIN_PASSWORD}"
+echo "Running command: $cmd"
+TOKEN_RESPONSE=$($cmd)
 TOKEN=$(echo "$TOKEN_RESPONSE" | jq -r '.key')
 
 # Save credentials to .env.grafanamcp file
@@ -44,11 +56,13 @@ if [ "$RUN_TESTS" = "true" ]; then
   echo "Running tests... Awaiting container first..."
   SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
   source "$SCRIPT_DIR/../../.env.grafanamcp"
+  echo "GRAFANA_MCP_URL: $GRAFANA_MCP_URL"
   start_time=$(date +%s)
-  while ! curl -s -f -v ${GRAFANA_MCP_URL} &> /dev/null; do
+  while ! curl -s -f -v ${GRAFANA_MCP_URL} &> curl_output.log; do
     current_time=$(date +%s)
     if (( current_time - start_time > CONTAINER_START_TIMEOUT )); then
       echo "Timeout waiting ${CONTAINER_START_TIMEOUT}s for Grafana MCP server to become available"
+      cat curl_output.log
       break
     fi
     sleep 1
@@ -56,7 +70,9 @@ if [ "$RUN_TESTS" = "true" ]; then
   done
   # Try this too to get more debugging info in case:
   echo "Running tests... Double checking container again first..."
-    while ! docker exec servutils_mcp_grafanamcp_container curl -s -f http://localhost:8080 &> /dev/null; do
+  cmd="docker exec servutils_mcp_grafanamcp_container curl -s -f -v http://localhost:8080"
+  echo "Running command: $cmd"
+  while ! $cmd &> /dev/null; do
     current_time=$(date +%s)
     if (( current_time - start_time > CONTAINER_START_TIMEOUT )); then
       echo "Timeout waiting ${CONTAINER_START_TIMEOUT}s for Grafana MCP server to become available"
@@ -67,7 +83,9 @@ if [ "$RUN_TESTS" = "true" ]; then
   done
   echo ""
   echo "Running tests..."
-  "$SCRIPT_DIR/test_grafanamcp_server.sh"
+  cmd="$SCRIPT_DIR/test_grafanamcp_server.sh"
+  echo "Running command: $cmd"
+  $cmd
 else
   echo "Tests suppressed."
 fi

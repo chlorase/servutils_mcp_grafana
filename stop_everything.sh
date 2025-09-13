@@ -3,7 +3,7 @@
 # optionally removes volumes, and cleans up the network.
 # PRE: the prefixes of all your containers in this project, as specified in docker-compose.yml use a same 'servutils_mcp_grafana'.
 set -euo pipefail
-echo "Running $(basename "${BASH_SOURCE[0]}")"
+echo "Running Script: ./${BASH_SOURCE[0]/#$(pwd)\//} $@"
 
 PROJECT_PREFIX="servutils_mcp_grafana"
 
