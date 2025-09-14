@@ -1,10 +1,16 @@
-Loki is for the MCP logging resource.
-Grafana's Loki service gets and saves logs (via promtail) from some source and puts into grafana server (a go between from a log emitting source and grafana). It also allows LogQL fromatted queries in grafana service.
+# Folders/modules
+----------------
+## grafanamcp
+(Grafana's) GrafanaMCP (aka mpc-grafana) server/api, is for MCP's LLM prompting hookups
+- a package sitting in front of Grafana server, exposing MCP-tooling to LLMs
+- provides interfacing via AI editor programs like Zed.
 
-Grafana-Tempo is for the MCP Tracing resource.
-Grafana's Tempo is for tracing requests through MCP flow.
+## loki
+(Grafana's) Loki is for the MCP logging resource.
+- Loki is Grafana's logging solution, gets and saves logs (via promtail) from some some log-emitting source and puts into grafana server.
+- Also allows LogQL fromatted queries in grafana dashboards.
 
-Prometheus is for the MCP metrics resource.
-Prometheus is the Grafana Metrics solution, scrapes metrics and put into grafana server (a go between from a metrics emitting source, and grafana).
-
-GrafanaMCP is a package sitting in front of Grafana server, exposing MCP-tooling to LLMs.
+## prometheus
+(Grafana's) Prometheus is for the MCP metrics resource.
+- Prometheus is the Grafana Metrics solution, scrapes metrics from some metrics-emitting source and puts into grafana server.
+- Also allows PromQL fromatted queries in grafana dashboards.

@@ -1,41 +1,46 @@
 servutils_mcp_grafana/
-
-|- bootstrap_helpers/
-__|- ensure_docker_running.sh
-__|- get_docker_compose_cmd.sh
-__|- load_env_first.sh
-__|- start_service.sh
-__|- wait_for_specified_services.sh
-
-|- example_metrics_emitter/
-__|- provisioning/
-_____|- grafana/
-________|- dashboards
-___________|- example-metrics-dashboard.yml
-________|- datasources/
-___________|- prometheus_datasource.yml
-__|- create_example_dashboard.sh
-__|- Dockerfile
-__|- example_metrics_emitter.py
-__|- open_example_dashboard.sh
-__|- requirements.txt
-__|- start_example_emitter_server.sh
-
-|- grafana/
-__|- loki/
-____|- start.sh
-__|- prometheus/
-____|- prometheus.yml  (basic metrics + metics specific for the example_metrics_emitter.py)
-____|- start_prometheus_server.sh
-__|- grafanamcp/
-____|- start_grafanamcp_server.sh
-____|- test_grafanamcp_server.sh
-__|- start_grafana_server.sh
-
-|- .env
-|- .env.example
-|- .gitignore
-|- docker-compose.yaml
-|- README.md
-|- start_everything.sh
-|- stop_everything.sh
+├── bootstrap_helpers/
+│   ├── ensure_docker_running.sh
+│   ├── get_docker_compose_cmd.sh
+│   ├── load_env_first.sh
+│   ├── start_service.sh
+│   └── wait_for_specified_services.sh
+│
+├── example_metrics_emitter/
+│   ├── provisioning/
+│   │   └── grafana/
+│   │       ├── dashboards/
+│   │       │   ├── example-metrics-dashboard.yaml
+│   │       │   └── example-metrics-dashboard.json (auto-generated locally)
+│   │       └── datasources/
+│   │           └── prometheus_datasource.yml
+│   ├── create_example_dashboard.sh
+│   ├── Dockerfile  (for setting up the example_metrics_emitter.py service)
+│   ├── example_metrics_emitter.py
+│   ├── open_example_dashboard.sh
+│   ├── requirements.txt
+│   └── start_example_emitter_server.sh
+│
+├── grafana/
+│   ├── grafanamcp/
+│   │   ├── Dockerfile
+│   │   ├── start_grafanamcp_server.sh
+│   │   └── test_grafanamcp_server.sh
+│   ├── loki/
+│   │   └── start.sh  (stub, to rename and complete possibly in future)
+│   ├── prometheus/
+│   │   ├── prometheus.yml  (basic metrics + metrics specific for the example_metrics_emitter.py)
+│   │   └── start_prometheus_server.sh
+│   └── start_grafana_server.sh
+│
+├── .env
+├── .env.example
+├── .env.grafana (auto-generated locally)
+├── .gitattributes
+├── .gitignore
+├── docker-compose.yaml
+├── README.md
+├── restart_everything.sh
+├── start_everything.sh
+└── stop_everything.sh
+└── vscode.code-workspace
