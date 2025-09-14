@@ -143,7 +143,7 @@ if [ "$RUN_TESTS" = "true" ]; then
     echo -n "."
   done
 
-  echo ""
+  echo "===================================="
   echo "Running tests..."
   cmd="$SCRIPT_DIR/test_grafanamcp_server.sh"
   $cmd
