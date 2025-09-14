@@ -53,4 +53,3 @@ grafana-data/
 .env.grafanamcp.localgenerated
 # bstodo rename this with a localgenerated in teh name for easy filter:
 grafana/grafanamcp/test_mcp_dashboard_summary.json
-

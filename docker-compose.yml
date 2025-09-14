@@ -1,3 +1,4 @@
+# docker-compose.yml.
 # Just to avoid warnings in the cmdline log, can just remove  the first line here about the 
 # 'version: 3.8', as  modern Docker Compose ignores it anyhow:
 # version: '3.8'
@@ -50,7 +51,8 @@ services:
     depends_on:
       - prometheus
       - grafana
-    command: -t streamable-http -address :${GRAFANA_MCP_PORT} -endpoint-path /mcp -log-level debug -enabled-tools admin
+    command: -t streamable-http -address ${GRAFANA_MCP_URL} -endpoint-path / -log-level debug -debug
+    # command: -address ${GRAFANA_MCP_URL} -debug mcp/grafana -t stdio -endpoint-path /
     healthcheck:
       test: ["CMD", "curl", "-f", "${GRAFANA_MCP_URL}"]
       interval: 10s
