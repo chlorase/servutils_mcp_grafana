@@ -46,7 +46,7 @@ services:
       - "${GRAFANA_MCP_PORT}:${GRAFANA_MCP_PORT}"
     environment:
       - GRAFANA_URL=${GRAFANA_URL}
-      - GRAFANA_API_KEY=${GRAFANA_API_KEY}
+      - GRAFANA_SERVICE_ACCOUNT_TOKEN=${GRAFANA_SERVICE_ACCOUNT_TOKEN}
     restart: unless-stopped
     depends_on:
       - prometheus
