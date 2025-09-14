@@ -1,5 +1,5 @@
 # docker-compose.yml.
-# Just to avoid warnings in the cmdline log, can just remove  the first line here about the 
+# Just to avoid warnings in the cmdline log, can just remove  the first line here about the
 # 'version: 3.8', as  modern Docker Compose ignores it anyhow:
 # version: '3.8'
 
@@ -19,7 +19,7 @@ services:
       # If not using examples, comment these out. Coupled to example metrics service's datasources and dashboards.
       - ./example_metrics_emitter/provisioning/grafana/datasources:/etc/grafana/provisioning/datasources #Grafana automatically knows how to pick these up locally to make available as dashboard with the file names in urls, and as available datasources
       - ./example_metrics_emitter/provisioning/grafana/dashboards:/etc/grafana/provisioning/dashboards #Grafana automatically knows how to pick these up locally to make available as dashboard with the file names in urls, and as available datasources
-      - ./grafana-data:/var/lib/grafana  # persistent Grafana DB, this line here just to avoid warns in cmd line log
+      - ./grafana-data:/var/lib/grafana # persistent Grafana DB, this line here just to avoid warns in cmd line log
 
   prometheus:
     image: prom/prometheus:latest
@@ -46,25 +46,24 @@ services:
       - "${GRAFANA_MCP_PORT}:${GRAFANA_MCP_PORT}"
     environment:
       - GRAFANA_URL=${GRAFANA_URL}
-      - GRAFANA_SERVICE_ACCOUNT_TOKEN=${GRAFANA_SERVICE_ACCOUNT_TOKEN}
+      - GRAFANA_API_KEY=${GRAFANA_API_KEY}
     restart: unless-stopped
     depends_on:
       - prometheus
       - grafana
-    command: -t streamable-http -address ${GRAFANA_MCP_URL} -endpoint-path / -log-level debug -debug
-    # command: -address ${GRAFANA_MCP_URL} -debug mcp/grafana -t stdio -endpoint-path /
-    healthcheck:
-      test: ["CMD", "curl", "-f", "${GRAFANA_MCP_URL}"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+    # Streaming mode:
+    #command: -t streamable-http -address ${GRAFANA_MCP_URL} -endpoint-path / -log-level debug -debug  mcp/grafana
+    # STDIO mode:
+    #command: -address ${GRAFANA_MCP_URL} -debug mcp/grafana -t stdio -endpoint-path /  mcp/grafana
+    # SSE Mode:
+    command: -address ${GRAFANA_MCP_URL} -endpoint-path / -log-level debug -debug mcp/grafana
 
   example_metrics_emitter_servicename: # note, to work, coupled to grafana service's volumes adding the datasources and dashboards.
     build:
       context: ./example_metrics_emitter
     container_name: example_metrics_container
     ports:
-      - "${EXAMPLE_METRICS_EMITTER_PORT}:${EXAMPLE_METRICS_EMITTER_PORT}"  # host_port:container_port
+      - "${EXAMPLE_METRICS_EMITTER_PORT}:${EXAMPLE_METRICS_EMITTER_PORT}" # host_port:container_port
 
 # Just to have an explicit predictable name to find (rather than relying on Docker's auto-gen'd name that'd be same as containing folder):
 networks:

@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-# This script generates example metrics, creates a dashboard JSON file, and uploads it to Grafana.
+# create_example_dashboard.sh. 
+# This script generates *initial* example metrics, creates a dashboard JSON file, and uploads it to Grafana.
+# NOTE: for dynamically updated metric values, you should *also* ensure the example_metrics_emitter.py service is constantly running.
 set -euo pipefail
 echo "Running Script: ./${BASH_SOURCE[0]/#$(pwd)\//} $@"
 
@@ -19,11 +21,13 @@ START=$((NOW - 7200))  # 2 hours ago
 > "$TIME_SERIES_FILE"
 
 for TS in $(seq $START 1 $NOW); do
-    EXAMPLE_VALUE=$((100 + RANDOM % 100))
+    EXAMPLE_VALUE_A1=$((100 + RANDOM % 100))
+    EXAMPLE_VALUE_A2=$((EXAMPLE_VALUE_A1 * 12 / 10))  # 1.2 times EXAMPLE_VALUE_A1
     CPU_VALUE=$((50 + RANDOM % 50))
-    MEM_VALUE=$((50 + RANDOM % 200))
+    MEM_VALUE=$((500 + RANDOM % 200))
 
-    echo "exampleMetricA{instance=\"${EXAMPLE_METRICS_EMITTER_CONTAINERNAME}:${EXAMPLE_METRICS_EMITTER_PORT}\"} $EXAMPLE_VALUE $TS" >> "$TIME_SERIES_FILE"
+    echo "exampleMetricA1{instance=\"${EXAMPLE_METRICS_EMITTER_CONTAINERNAME}:${EXAMPLE_METRICS_EMITTER_PORT}\"} $EXAMPLE_VALUE_A1 $TS" >> "$TIME_SERIES_FILE"
+    echo "exampleMetricA2{instance=\"${EXAMPLE_METRICS_EMITTER_CONTAINERNAME}:${EXAMPLE_METRICS_EMITTER_PORT}\"} $EXAMPLE_VALUE_A2 $TS" >> "$TIME_SERIES_FILE"
     echo "example_cpu_usage{instance=\"${EXAMPLE_METRICS_EMITTER_CONTAINERNAME}:${EXAMPLE_METRICS_EMITTER_PORT}\"} $CPU_VALUE $TS" >> "$TIME_SERIES_FILE"
     echo "example_memory_usage{instance=\"${EXAMPLE_METRICS_EMITTER_CONTAINERNAME}:${EXAMPLE_METRICS_EMITTER_PORT}\"} $MEM_VALUE $TS" >> "$TIME_SERIES_FILE"
 done
@@ -61,7 +65,7 @@ PANEL=$(jq -n --argjson panelId 1 \
 {
   "id": $panelId,
   "type": "timeseries",
-  "title": "ExampleMetricA, Example CPU + Example mem",
+  "title": "ExampleMetricA1, ExampleMetricA2, Example CPU + Example mem",
   "gridPos": { "h": 8, "w": 24, "x": 0, "y": 0 },
   "fieldConfig": {
     "defaults": { "unit": "none" },
@@ -76,9 +80,10 @@ PANEL=$(jq -n --argjson panelId 1 \
   },
   "options": { "legend": { "displayMode": "list" }, "tooltip": { "mode": "single" } },
   "targets": [
-    { "expr": "exampleMetricA{instance=\"\($containerName):\($port)\"}", "legendFormat": "ExampleMetricA", "refId": "A" },
-    { "expr": "example_cpu_usage{instance=\"\($containerName):\($port)\"}", "legendFormat": "CPU", "refId": "B" },
-    { "expr": "example_memory_usage{instance=\"\($containerName):\($port)\"}", "legendFormat": "Mem", "refId": "C" }
+    { "expr": "exampleMetricA1{instance=\"\($containerName):\($port)\"}", "legendFormat": "ExampleMetricA1", "refId": "A" },
+    { "expr": "exampleMetricA2{instance=\"\($containerName):\($port)\"}", "legendFormat": "ExampleMetricA2", "refId": "B" },
+    { "expr": "example_cpu_usage{instance=\"\($containerName):\($port)\"}", "legendFormat": "CPU", "refId": "C" },
+    { "expr": "example_memory_usage{instance=\"\($containerName):\($port)\"}", "legendFormat": "Mem", "refId": "D" }
   ],
   "datasource": "Prometheus_main"
 }
@@ -114,7 +119,7 @@ while true; do
         sleep 5
         RETRY_COUNT=$((RETRY_COUNT + 1))
         if [ $RETRY_COUNT -ge $MAX_RETRIES ]; then
-            echo "Max retries reached. Dashboard not uploaded."
+            echo "Max retries reached. Dashboard not uploaded. Aborting."
             exit 1
         fi
     fi

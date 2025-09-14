@@ -76,7 +76,7 @@ echo "1st checking if existing tokens exist (will remove to refresh/recreate if 
 cmd=(curl -v -s -m 10 -X GET -H "Content-Type: application/json" ${GRAFANA_URL}/api/serviceaccounts/$SERVICE_ACCOUNT_ID/tokens -u ${GRAFANA_ADMIN_USER}:${GRAFANA_ADMIN_PASSWORD})
 echo ".. Running command: ${cmd[@]}"
 TOKENS_RESPONSE=$("${cmd[@]}")
-echo ".. result: ${TOKENS_RESPONSE} (empty means no existing tokens, non-empty means we'll delete them first)"
+echo ".. result: ${TOKENS_RESPONSE} (If this is empty means no existing tokens)"
 
 # Delete existing token with the same name
 for token in $(echo "$TOKENS_RESPONSE" | jq -r '.[] | select(.name == "'"$TOKEN_NAME"'") | .id'); do
@@ -117,17 +117,22 @@ if [ "$RUN_TESTS" = "true" ]; then
   echo "Running tests... Awaiting container first..."
   SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
   source "$ENV_GRAFANAMCP_FILEPATH"
-  start_time=$(date +%s)
+  start_time=$(date -u +%s)
   echo ".. GRAFANA_MCP_URL: $GRAFANA_MCP_URL"
   echo ".. start_time: $start_time"
-  cmd=(curl -s -f -m 5 -v ${GRAFANA_MCP_URL}) # Ensure to include the -m timeout so this exits
+
+  TEMP_LOG_DIR="${SCRIPT_DIR}/localgenerated"
+  [ ! -d "${TEMP_LOG_DIR}" ] && mkdir -p "$TEMP_LOG_DIR" && chmod u+w "$TEMP_LOG_DIR"
+  TEMP_CURL_LOG_PATH="${TEMP_LOG_DIR}/curl_output.log"
+
+  cmd=(curl -s -f -m 5 ${GRAFANA_MCP_URL}) # Ensure to include the -m timeout so this exits
   echo ".. checking using cmd: ${cmd[@]} .."
-  while ! $("${cmd[@]}") &> curl_output.log; do
+  while ! $("${cmd[@]}") &> ${TEMP_CURL_LOG_PATH}; do
     echo "curl command failed, checking again..."
-    current_time=$(date +%s)
+    current_time=$(date -u +%s)
     if (( current_time - start_time > CONTAINER_START_TIMEOUT )); then
       echo "Timeout waiting ${CONTAINER_START_TIMEOUT}s for Grafana MCP server to become available"
-      cat curl_output.log
+      cat ${TEMP_CURL_LOG_PATH}
       break
     elif [ $? -ne 0 ]; then
       echo "curl command exited with non-zero status, exiting loop"

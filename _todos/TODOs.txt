@@ -3,16 +3,6 @@ TODOs:
 - server side access first basic setups:
     - graf, prometh
     >done
-    - relocate the prometheus.yml under example_metrics-logs_emitter/ to example_metrics-logs_emitter/provisioning/prometheus
-    >done
-
-    - fix all .yml filees cannot reference .env vars.
-    >done
-    - bleh delete  examples copy of the prometheus.yml
-    >done
-
-    - refactoring and get all prometheus, grafana working.
-    >done
     - setup grafana gen fake data for now
     >done
     - basic mcp graf server setup and test.

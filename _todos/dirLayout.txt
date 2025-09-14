@@ -24,6 +24,9 @@ servutils_mcp_grafana/
 ├── grafana/
 │   ├── grafanamcp/
 │   │   ├── Dockerfile
+│   │   ├── provisioning/
+│   │   │   ├── test_mcp_dashboard_summary.json (auto-generated locally, not checked in)
+│   │   │   ├── test_zed_gemini_query.txt (auto-generated locally, not checked in)
 │   │   ├── start_grafanamcp_server.sh
 │   │   └── test_grafanamcp_server.sh
 │   ├── loki/

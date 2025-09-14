@@ -9,7 +9,7 @@
       {
         "id": 1,
         "type": "timeseries",
-        "title": "ExampleMetricA, Example CPU + Example mem",
+        "title": "ExampleMetricA1, ExampleMetricA2, Example CPU + Example mem",
         "gridPos": {
           "h": 8,
           "w": 24,
@@ -45,19 +45,24 @@
         },
         "targets": [
           {
-            "expr": "exampleMetricA{instance=\"example_metrics_container:8001\"}",
-            "legendFormat": "ExampleMetricA",
+            "expr": "exampleMetricA1{instance=\"example_metrics_container:8001\"}",
+            "legendFormat": "ExampleMetricA1",
             "refId": "A"
+          },
+          {
+            "expr": "exampleMetricA2{instance=\"example_metrics_container:8001\"}",
+            "legendFormat": "ExampleMetricA2",
+            "refId": "B"
           },
           {
             "expr": "example_cpu_usage{instance=\"example_metrics_container:8001\"}",
             "legendFormat": "CPU",
-            "refId": "B"
+            "refId": "C"
           },
           {
             "expr": "example_memory_usage{instance=\"example_metrics_container:8001\"}",
             "legendFormat": "Mem",
-            "refId": "C"
+            "refId": "D"
           }
         ],
         "datasource": "Prometheus_main"

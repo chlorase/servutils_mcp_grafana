@@ -1,5 +1,7 @@
 #!/bin/bash
-# create_example_dashboard_for_grafanamcp.sh: Create a dashboard with example metrics
+# create_example_dashboard_for_grafanamcp.sh
+# This script generates *initial* example metrics, creates a dashboard JSON file, and uploads it to Grafana.
+# NOTE: for dynamically updated metric values, you should *also* ensure the example_metrics_emitter.py service is constantly running.
 set -euo pipefail
 echo "Running Script: ./${BASH_SOURCE[0]/#$(pwd)\//} $@"
 
@@ -22,7 +24,7 @@ PANEL=$(jq -n --argjson panelId 1 \
 {
   "id": $panelId,
   "type": "timeseries",
-  "title": "ExampleMetricA, CPU, Mem",
+  "title": "ExampleMetricA1, ExampleMetricA2, CPU, Mem",
   "gridPos": { "h": 8, "w": 24, "x": 0, "y": 0 },
   "fieldConfig": {
     "defaults": { "unit": "none" },
@@ -37,9 +39,10 @@ PANEL=$(jq -n --argjson panelId 1 \
   },
   "options": { "legend": { "displayMode": "list" }, "tooltip": { "mode": "single" } },
   "targets": [
-    { "expr": "exampleMetricA{instance=\"\($containerName):\($port)\"}", "legendFormat": "ExampleMetricA", "refId": "A" },
-    { "expr": "example_cpu_usage{instance=\"\($containerName):\($port)\"}", "legendFormat": "CPU", "refId": "B" },
-    { "expr": "example_memory_usage{instance=\"\($containerName):\($port)\"}", "legendFormat": "Mem", "refId": "C" }
+    { "expr": "exampleMetricA1{instance=\"\($containerName):\($port)\"}", "legendFormat": "ExampleMetricA1", "refId": "A" },
+    { "expr": "exampleMetricA2{instance=\"\($containerName):\($port)\"}", "legendFormat": "ExampleMetricA2", "refId": "B" },
+    { "expr": "example_cpu_usage{instance=\"\($containerName):\($port)\"}", "legendFormat": "CPU", "refId": "C" },
+    { "expr": "example_memory_usage{instance=\"\($containerName):\($port)\"}", "legendFormat": "Mem", "refId": "D" }
   ],
   "datasource": "'"$DATASOURCE_NAME"'"
 }
@@ -74,4 +77,8 @@ cmd=(curl -s -X POST -H "Content-Type: application/json" \
   "$GRAFANA_URL/api/dashboards/db")
 echo "Running command: ${cmd[@]}"
 RESPONSE=$("${cmd[@]}")
+if [ $? -ne 0 ]; then
+  echo "Failed to create dashboard"
+  exit 1
+fi
 echo "Dashboard creation response: $RESPONSE"
