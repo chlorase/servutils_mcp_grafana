@@ -1,33 +1,45 @@
 #!/bin/bash
 # ensure_installers_helpers_synced.sh
-# Grabs the installers scripts from Git and syncs them if not already present.
-
+# Ensures the 'installers' submodule is initialized, updated, and available locally.
 set -euo pipefail
 echo ".. Helper: ./${BASH_SOURCE[0]/#$(pwd)\//} $@"
+
 echo "Checking for Git submodule: /installers"
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-INSTALLERS_PATH="${SCRIPT_DIR}/../installers"
-
+REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+INSTALLERS_PATH="${REPO_ROOT}/installers"
+# Ensure we're in a Git repo (path)
+if ! git -C "$REPO_ROOT" rev-parse --is-inside-work-tree &> /dev/null; then
+  echo "ERROR: Not inside a Git repository. Cannot sync submodules."
+  exit 1
+fi
+# Initialize submodule if not present
 if [ ! -d "${INSTALLERS_PATH}/.git" ]; then
   echo "Submodule 'installers' not initialized. Initializing now..."
 
   echo "+ git submodule init"
-  git submodule init
+  git -C "$REPO_ROOT" submodule init
 
   echo "+ git submodule update"
-  git submodule update
+  git -C "$REPO_ROOT" submodule update
 
   echo "+ git submodule update --remote --merge"
-  git submodule update --remote --merge
+  git -C "$REPO_ROOT" submodule update --remote --merge
 else
   echo "Submodule 'installers' already initialized."
 fi
 
-# Verify the submodule directory exists
+# Fallback: manually clone if submodule failed
 if [ ! -d "${INSTALLERS_PATH}" ]; then
-  echo "ERROR: Submodule 'installers' directory not found at ${INSTALLERS_PATH}"
-  echo "Make sure the submodule is correctly defined in .gitmodules and that you're in the root of the repo."
+  echo "Submodule directory not found. Attempting manual clone..."
+  echo "+ git clone https://github.com/chlorase/installers ${INSTALLERS_PATH}"
+  git clone https://github.com/chlorase/installers "${INSTALLERS_PATH}"
+fi
+
+# Final check
+if [ ! -d "${INSTALLERS_PATH}" ]; then
+  echo "ERROR: Submodule 'installers' directory still missing at ${INSTALLERS_PATH}"
   exit 1
 fi
 
