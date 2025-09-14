@@ -102,18 +102,21 @@ if [ -z "$TOKEN" ]; then
   exit 1
 fi
 
-# Save credentials to .env.grafanamcp file
+# Save credentials to ${ENV_GRAFANAMCP_FILENAME} file
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-echo "GRAFANA_URL=${GRAFANA_URL}" > "$SCRIPT_DIR/../../.env.grafanamcp"
-echo "GRAFANA_SERVICE_ACCOUNT_TOKEN=$TOKEN" >> "$SCRIPT_DIR/../../.env.grafanamcp"
-echo "GRAFANA_MCP_URL=${GRAFANA_MCP_URL}" >> "$SCRIPT_DIR/../../.env.grafanamcp"
-echo "GRAFANA_MCP_PORT=${GRAFANA_MCP_PORT}" >> "$SCRIPT_DIR/../../.env.grafanamcp"
+ENV_GRAFANAMCP_FILEPATH="$SCRIPT_DIR/../../${ENV_GRAFANAMCP_FILENAME}"
+echo "Saving credentials to: $ENV_GRAFANAMCP_FILEPATH ."
+echo "# Auto-generated credentials for local MCP Grafana instance" > "$ENV_GRAFANAMCP_FILEPATH"
+echo "GRAFANA_URL=${GRAFANA_URL}" >> "$ENV_GRAFANAMCP_FILEPATH"
+echo "GRAFANA_SERVICE_ACCOUNT_TOKEN=$TOKEN" >> "$ENV_GRAFANAMCP_FILEPATH"
+echo "GRAFANA_MCP_URL=${GRAFANA_MCP_URL}" >> "$ENV_GRAFANAMCP_FILEPATH"
+echo "GRAFANA_MCP_PORT=${GRAFANA_MCP_PORT}" >> "$ENV_GRAFANAMCP_FILEPATH"
 
 # Run tests by default, but allow suppression
 if [ "$RUN_TESTS" = "true" ]; then
   echo "Running tests... Awaiting container first..."
   SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-  source "$SCRIPT_DIR/../../.env.grafanamcp"
+  source "$ENV_GRAFANAMCP_FILEPATH"
   start_time=$(date +%s)
   echo ".. GRAFANA_MCP_URL: $GRAFANA_MCP_URL"
   echo ".. start_time: $start_time"

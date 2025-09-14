@@ -11,7 +11,7 @@ servutils_mcp_grafana/
 │   │   └── grafana/
 │   │       ├── dashboards/
 │   │       │   ├── example-metrics-dashboard.yaml
-│   │       │   └── example-metrics-dashboard.json (auto-generated locally)
+│   │       │   └── example-metrics-dashboard.json (auto-generated locally, not checked in)
 │   │       └── datasources/
 │   │           └── prometheus_datasource.yml
 │   ├── create_example_dashboard.sh
@@ -34,13 +34,12 @@ servutils_mcp_grafana/
 │   └── start_grafana_server.sh
 │
 ├── .env
-├── .env.example
-├── .env.grafana (auto-generated locally)
+├── .env.grafana.localgenerated (auto-generated locally, not checked in)
 ├── .gitattributes
 ├── .gitignore
 ├── docker-compose.yaml
 ├── README.md
-├── restart_everything.sh
+├── restart_everything.sh (just wraps calling "start_everything.sh restart")
 ├── start_everything.sh
 └── stop_everything.sh
 └── vscode.code-workspace

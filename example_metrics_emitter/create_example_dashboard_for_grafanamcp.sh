@@ -6,7 +6,7 @@ echo "Running Script: ./${BASH_SOURCE[0]/#$(pwd)\//} $@"
 # Load environment variables
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/../bootstrap_helpers/load_env_first.sh"
-source "$SCRIPT_DIR/../.env.grafanamcp"
+source "$SCRIPT_DIR/../${ENV_GRAFANAMCP_FILENAME}"
 
 EXAMPLE_METRICS_EMITTER_CONTAINERNAME="example_metrics_container"
 # Dashboard metadata

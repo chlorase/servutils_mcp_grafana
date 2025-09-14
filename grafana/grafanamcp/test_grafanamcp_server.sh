@@ -27,11 +27,11 @@ echo "└── Verifies dashboard exists via curl + token"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/../../bootstrap_helpers/load_env_first.sh"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "$SCRIPT_DIR/../../.env.grafanamcp"
+source "$SCRIPT_DIR/../../${ENV_GRAFANAMCP_FILENAME}"
 
 # -------------------------------
 # ZED INTEGRATION + DASHBOARD LAUNCH
-# Note Grafana's stock mcp-grafana doesn't expose regular REST endpoints, so you need to install a client like Zed to interface with the mcp-grafana dashboards and create etc.
+# Note Grafana's stock mcp-grafana doesn't expose regular REST endpoints, so you need to install a client like Zed to interface with the mcp-grafana dashboards and create etc (Zed has LLM and grafana MCP libraries etc you can use later, for dev use)
 # -------------------------------
 
 echo ""
@@ -54,9 +54,8 @@ cat > "$ZED_TEST_FILE" <<EOF
   "mcp_endpoint": "${GRAFANA_MCP_URL}",
   "tenant": "my-tenant",
   "dashboard": {
-    "title": "My Dashboard",
-    "url": "${GRAFANA_URL}/d/my-dashboard/my-dashboard?orgId=1",
-    "created": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+    "title": "MCP Metrics Dashboard",
+    "url": "${GRAFANA_URL}/d/mcp-metrics-dashboard/mcp-metrics-dashboard?orgId=1"
   },
   "notes": "This dashboard was created via MCP test script. You can use this file to summarize or extend dashboard metadata."
 }
@@ -79,9 +78,14 @@ echo ""
 echo "Running curl test to fetch dashboard metadata..."
 DASHBOARD_UID="mcp-metrics-dashboard"
 CURL_CMD="curl -H \"Authorization: Bearer ${GRAFANA_SERVICE_ACCOUNT_TOKEN}\" \"${GRAFANA_URL}/api/dashboards/uid/${DASHBOARD_UID}\""
-echo "Executing: $CURL_CMD"
+echo "..Executing: $CURL_CMD"
 eval "$CURL_CMD"
-
 echo ""
+
+echo "Running test to check tenants"
+cmd=(curl -s -H \"Authorization: Bearer ${GRAFANA_SERVICE_ACCOUNT_TOKEN}\" "${GRAFANA_MCP_URL}/tenants")
+echo ".. Running command: ${cmd[@]}"
+"${cmd[@]}"
+
 echo "Script complete."
 
