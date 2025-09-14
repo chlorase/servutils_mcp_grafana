@@ -1,5 +1,6 @@
 #!/bin/bash
-# test_grafanamcp_server.sh: Test the Grafana MCP server
+# test_grafanamcp_server.sh
+# Test the Grafana MCP server
 
 echo "-------"
 echo ""

@@ -1,5 +1,6 @@
 #!/bin/bash
-# start_grafanamcp_server.sh: Start the Grafana MCP server
+# start_grafanamcp_server.sh
+# Start the Grafana MCP server
 
 echo "Running Script: ./${BASH_SOURCE[0]/#$(pwd)\//} $@"
 

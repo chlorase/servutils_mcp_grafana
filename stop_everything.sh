@@ -1,4 +1,5 @@
 #!/bin/bash
+# stop_everything.sh
 # Stops and removes all Docker containers associated with this project,
 # optionally removes volumes, and cleans up the network.
 # PRE: the prefixes of all your containers in this project, as specified in docker-compose.yml use a same 'servutils_mcp_grafana'.

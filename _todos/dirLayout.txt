@@ -1,6 +1,7 @@
 servutils_mcp_grafana/
 ├── bootstrap_helpers/
 │   ├── ensure_docker_running.sh
+│   ├── ensure_installers_helpers_synced.sh
 │   ├── get_docker_compose_cmd.sh
 │   ├── load_env_first.sh
 │   ├── start_service.sh
@@ -15,26 +16,35 @@ servutils_mcp_grafana/
 │   │       └── datasources/
 │   │           └── prometheus_datasource.yml
 │   ├── create_example_dashboard.sh
+│   ├── create_example_dashboard_for_grafanamcp.sh
 │   ├── Dockerfile  (for setting up the example_metrics_emitter.py service)
 │   ├── example_metrics_emitter.py
 │   ├── open_example_dashboard.sh
+│   ├── open_example_dashboard_for_grafanamcp.sh
 │   ├── requirements.txt
 │   └── start_example_emitter_server.sh
 │
 ├── grafana/
 │   ├── grafanamcp/
+│   │   ├── localgenerated/
+│   │   │   ├── test_mcp_dashboard_summary.json  (auto-generated locally, not checked in)
+│   │   │   ├── test_zed_gemini_query_get30min.txt (auto-generated locally, not checked in)
+│   │   │   ├── test_zed_gemini_query_getCorrelations.txt (auto-generated locally, not checked in)
 │   │   ├── Dockerfile
-│   │   ├── provisioning/
-│   │   │   ├── test_mcp_dashboard_summary.json (auto-generated locally, not checked in)
-│   │   │   ├── test_zed_gemini_query.txt (auto-generated locally, not checked in)
 │   │   ├── start_grafanamcp_server.sh
 │   │   └── test_grafanamcp_server.sh
 │   ├── loki/
 │   │   └── start.sh  (stub, to rename and complete possibly in future)
 │   ├── prometheus/
-│   │   ├── prometheus.yml  (basic metrics + metrics specific for the example_metrics_emitter.py)
-│   │   └── start_prometheus_server.sh
+│   │   ├── prometheus.yml  (basic metrics, including example metrics for the example_metrics_emitter.py)
+│   │   └── start_prometheus_server.sh   (... TODO rename start_local_prometheus_server.sh? and  similarl for all the other start_*.sh?)
 │   └── start_grafana_server.sh
+│
+├── installers/ (This is a remote git submodule syncd automatically).
+│
+├── llm/
+│   ├── 
+│   └── start_local_llm_mistral.sh
 │
 ├── .env
 ├── .env.grafana.localgenerated (auto-generated locally, not checked in)
@@ -42,7 +52,7 @@ servutils_mcp_grafana/
 ├── .gitignore
 ├── docker-compose.yaml
 ├── README.md
-├── restart_everything.sh (just wraps calling "start_everything.sh restart")
+├── restart_everything.sh (Wraps "start_everything.sh restart")
 ├── start_everything.sh
 └── stop_everything.sh
 └── vscode.code-workspace

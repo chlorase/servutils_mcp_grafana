@@ -1,4 +1,6 @@
 #!/bin/bash
+# start_grafana_server.sh
+
 set -euo pipefail
 echo "Running Script: ./${BASH_SOURCE[0]/#$(pwd)\//} $@"
 

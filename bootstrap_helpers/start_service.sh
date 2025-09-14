@@ -1,4 +1,5 @@
 #!/bin/bash
+# start_service.sh
 # Helper to start a Docker Compose service
 
 SERVICE_NAME=$1

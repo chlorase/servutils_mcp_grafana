@@ -1,4 +1,6 @@
 #!/bin/bash
+# start_example_emitter_server.sh
+
 set -euo pipefail
 echo "Running Script: ./${BASH_SOURCE[0]/#$(pwd)\//} $@"
 
