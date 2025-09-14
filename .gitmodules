@@ -1,0 +1,3 @@
+[submodule "installers"]
+	path = installers
+	url = https://github.com/chlorase/installers

@@ -19,6 +19,9 @@ if [ "$MODE" == "restart" ]; then
     rm -rf ./loki-index
 fi
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "./bootstrap_helpers/ensure_installers_helpers_synced.sh"
+
 # Start Grafana server
 source "./grafana/start_grafana_server.sh" "${MODE}" || { echo "Failed to start Grafana server"; exit 1; }
 
