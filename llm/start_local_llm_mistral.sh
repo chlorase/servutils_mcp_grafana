@@ -1,6 +1,6 @@
 #!/bin/bash
 # start_local_llm_mistral.sh
-# Starts the local Mistral LLM (using Ollama server), for MCP integration.
+# Starts the local Mistral LLM (using Ollama platform), for MCP integration.
 set -euo pipefail
 echo ".. Helper: ./${BASH_SOURCE[0]/#$(pwd)\//} $@"
 
@@ -23,7 +23,7 @@ source "${INSTALLERS_DEFINES_SCRIPT}"
 # -------------------------------
 # Ensure Installed MCP + Mistral stack
 # -------------------------------
-INSTALL_MCP_SCRIPT="${INSTALLERS_DIR}/llm-mcp/install_all_typical_mcp_with_mistral.sh"
+INSTALL_MCP_SCRIPT="${INSTALLERS_DIR}/llm/install_mistral_ollama_with_mixtral.sh"
 source "${INSTALL_MCP_SCRIPT}"
 
 # -------------------------------
