@@ -1,6 +1,6 @@
 #!/bin/bash
 # start_local_llm_mistral.sh
-# Starts the local Mistral LLM server with MCP integration
+# Starts the local Mistral LLM (using Ollama server), for MCP integration.
 set -euo pipefail
 echo ".. Helper: ./${BASH_SOURCE[0]/#$(pwd)\//} $@"
 

@@ -34,6 +34,10 @@ source "./example_metrics_emitter/start_example_emitter_server.sh" "${MODE}" || 
 # Start 'Grafana MCP' Server and create test dashboard
 source "./grafana/grafanamcp/start_grafanamcp_server.sh" "${MODE}" || { echo "Failed to start Grafana MCP"; exit 1; }
 
+# Start LLM Server
+source "./llm/start_local_llm_mistral.sh" "${MODE}" || { echo "Failed to start LLM server"; exit 1; }
+
+
 #TODO IMPLEMENT rest
 
 echo "All services started."

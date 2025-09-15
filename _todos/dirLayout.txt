@@ -43,7 +43,6 @@ servutils_mcp_grafana/
 ├── installers/ (This is a remote git submodule syncd automatically).
 │
 ├── llm/
-│   ├── 
 │   └── start_local_llm_mistral.sh
 │
 ├── .env
