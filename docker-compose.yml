@@ -65,6 +65,17 @@ services:
     ports:
       - "${EXAMPLE_METRICS_EMITTER_PORT}:${EXAMPLE_METRICS_EMITTER_PORT}" # host_port:container_port
 
+  ollamaagent:
+    build:
+      context: ./llm/ollama_agent
+    container_name: servutils_mcp_ollamaagent_container
+    environment:
+      - OLLAMA_API_URL=http://host.docker.internal:11434
+    ports:
+      - "${OLLAMA_AGENT_PORT}:5000"
+    restart: unless-stopped
+
+
 # Just to have an explicit predictable name to find (rather than relying on Docker's auto-gen'd name that'd be same as containing folder):
 networks:
   default:

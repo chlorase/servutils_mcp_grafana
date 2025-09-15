@@ -15,12 +15,12 @@ servutils_mcp_grafana/
 │   │       │   └── example-metrics-dashboard.json (auto-generated locally, not checked in)
 │   │       └── datasources/
 │   │           └── prometheus_datasource.yml
-│   ├── create_example_dashboard.sh
 │   ├── create_example_dashboard_for_grafanamcp.sh
+│   ├── create_example_dashboard.sh
 │   ├── Dockerfile  (for setting up the example_metrics_emitter.py service)
 │   ├── example_metrics_emitter.py
-│   ├── open_example_dashboard.sh
 │   ├── open_example_dashboard_for_grafanamcp.sh
+│   ├── open_example_dashboard.sh
 │   ├── requirements.txt
 │   └── start_example_emitter_server.sh
 │
@@ -43,7 +43,12 @@ servutils_mcp_grafana/
 ├── installers/ (This is a remote git submodule syncd automatically).
 │
 ├── llm/
-│   └── start_local_llm_mistral.sh
+│   └── ollama_agent/
+│   │   ├── Dockerfile
+│   │   └── ollama_agent.py
+│   ├── start_local_llm_mistral.sh
+│   ├── start_local_ollama_mcp_agent.sh
+│   └── test_local_ollama_mcp_agent.sh
 │
 ├── .env
 ├── .env.grafana.localgenerated (auto-generated locally, not checked in)

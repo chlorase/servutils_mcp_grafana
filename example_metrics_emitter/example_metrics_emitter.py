@@ -1,3 +1,4 @@
+# example_metrics_emitter.py
 # This script serves as a stub for a real server that would dump metrics to Prometheus.
 # It exposes example metrics to Prometheus using the Prometheus client library.
 

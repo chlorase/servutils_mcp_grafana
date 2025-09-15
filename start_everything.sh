@@ -37,6 +37,9 @@ source "./grafana/grafanamcp/start_grafanamcp_server.sh" "${MODE}" || { echo "Fa
 # Start LLM Server
 source "./llm/start_local_llm_mistral.sh" "${MODE}" || { echo "Failed to start LLM server"; exit 1; }
 
+# Start LLM Agent Connection
+source "./llm/start_local_ollama_mcp_agent.sh" "${MODE}" || { echo "Failed to start LLM agent"; exit 1; }
+
 
 #TODO IMPLEMENT rest
 
