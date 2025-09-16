@@ -6,8 +6,14 @@ TODOs:
     - setup grafana gen fake data for now
     >done
     - basic mcp graf server setup and test.
+    >done
+>done
 
 - Hookup test LLM client
+    - ollama server
+    <>done
+    - ollama agent
+    .. almost but somtehings messed up against the ports still... almost have it hook upabble to ZED IDE after  taht
 
 
 - client/agent proxy

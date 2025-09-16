@@ -6,10 +6,17 @@ echo "Running Script: ./${BASH_SOURCE[0]/#$(pwd)\//} $@"
 
 MODE=${1:-up}  # default 'up', can also pass 'restart'
 
+# Load environment variables (for NETWORK_NAME etc)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/bootstrap_helpers/load_env_first.sh"
+
 if [ "$MODE" == "restart" ]; then
     echo "Stopping all containers..."
     SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
     "$SCRIPT_DIR/stop_everything.sh"
+
+    # To ensure even the Network is removed:
+    docker-compose down || true
 
     echo removing extra local dirs to clear grafana
     rm -rf ./grafana-data
@@ -19,7 +26,6 @@ if [ "$MODE" == "restart" ]; then
     rm -rf ./loki-index
 fi
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "./bootstrap_helpers/ensure_installers_helpers_synced.sh"
 
 # Start Grafana server

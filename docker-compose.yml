@@ -79,4 +79,4 @@ services:
 # Just to have an explicit predictable name to find (rather than relying on Docker's auto-gen'd name that'd be same as containing folder):
 networks:
   default:
-    name: servutils_mcp_grafana
+    name: ${NETWORK_NAME}

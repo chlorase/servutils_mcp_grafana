@@ -28,25 +28,34 @@ servutils_mcp_grafana/
 │   ├── grafanamcp/
 │   │   ├── localgenerated/
 │   │   │   ├── test_mcp_dashboard_summary.json  (auto-generated locally, not checked in)
-│   │   │   ├── test_zed_gemini_query_get30min.txt (auto-generated locally, not checked in)
-│   │   │   ├── test_zed_gemini_query_getCorrelations.txt (auto-generated locally, not checked in)
+│   │   │   └── test_zed_gemini_query_*.txt (auto-generated locally, not checked in)
 │   │   ├── Dockerfile
 │   │   ├── start_grafanamcp_server.sh
-│   │   └── test_grafanamcp_server.sh
+│   │   └── test_grafanamcp_server.sh, test_grafanamcp_server__zed.sh
 │   ├── loki/
 │   │   └── start.sh  (stub, to rename and complete possibly in future)
 │   ├── prometheus/
 │   │   ├── prometheus.yml  (basic metrics, including example metrics for the example_metrics_emitter.py)
-│   │   └── start_prometheus_server.sh   (... TODO rename start_local_prometheus_server.sh? and  similarl for all the other start_*.sh?)
+│   │   └── start_prometheus_server.sh
 │   └── start_grafana_server.sh
 │
-├── installers/ (This is a remote git submodule syncd automatically).
+├── installers/ (Remote git submodule syncd automatically. Files in it relevant to this project are below:)
+│   ├── llm/
+│   │   ├── install_mistral_ollama_with_mixtral.sh, install_mistral_ollama.sh
+│   │   └── run_mistral_ollama_server.sh
+│   ├── editors/
+│   │   ├── cursor/
+│   │   │   └── install_cursor.sh
+│   │   └── zed/
+│   │       └── install_zed.sh (Mac OS only)
+│   ├── helper_install_if_needed.sh
+│   └── set_installers_defines_first.sh, set_installers_dir.sh
 │
 ├── llm/
-│   └── ollama_agent/
+│   ├── ollama_agent/
 │   │   ├── Dockerfile
 │   │   └── ollama_agent.py
-│   ├── start_local_llm_mistral.sh
+│   ├── start_local_llm_mistral.sh (calls ../installers/llm scripts above)
 │   ├── start_local_ollama_mcp_agent.sh
 │   └── test_local_ollama_mcp_agent.sh
 │
