@@ -6,51 +6,54 @@ set -euo pipefail
 echo ".. Helper: ./${BASH_SOURCE[0]/#$(pwd)\//} $@"
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "$SCRIPT_DIR/../bootstrap_helpers/get_docker_compose_cmd.sh"
-
 # Load .env to ensure OLLAMA_AGENT_PORT is available
-set -a
-source "$SCRIPT_DIR/../.env"
-set +a
+source "$SCRIPT_DIR/../bootstrap_helpers/load_env_first.sh"
 
-MODE="${1:-up}"
-CONTAINER_NAME="servutils_mcp_ollamaagent_container"
-SERVICE_NAME="ollamaagent"
+MODE=${1:-up}
 PORT="${OLLAMA_AGENT_PORT:-5053}"
 
 # Check if port is occupied BEFORE container startup
-if lsof -i :"$PORT" >/dev/null; then
-  echo "Port $PORT is already in use. Consider changing OLLAMA_AGENT_PORT in .env."
-  lsof -i :"$PORT"
-  exit 1
-fi
-
-# Check if container is running
-EXISTING_CONTAINER=$(docker ps -q -f name="^/${CONTAINER_NAME}$")
-
-if [ -n "$EXISTING_CONTAINER" ]; then
-  if [ "$MODE" == "restart" ]; then
-    echo "-> Container $CONTAINER_NAME is running. Restarting..."
-    docker rm -f "$CONTAINER_NAME"
-
-    $COMPOSE_CMD rm -f "$SERVICE_NAME"
-    $COMPOSE_CMD build "$SERVICE_NAME"
-    $COMPOSE_CMD up -d "$SERVICE_NAME"
-
-    sleep 1
-  else
-    echo "-> Container $CONTAINER_NAME is already running. Skipping startup."
-    exit 0
+if [ "$MODE" != "restart" ]; then
+  if lsof -i :"$PORT" >/dev/null; then
+    pid=$(lsof -t -i:$PORT)
+    ps_output=$(ps -p "$pid" -o pid,comm)
+    if (echo "$ps_output" | grep -q "com.docker.backend"); then
+      # Double check ollama container *is* runnign too:
+      if docker ps --format '{{.Names}}' | grep -q "servutils_mcp_ollamaagent_container"; then
+        echo "Ollama is already running. Exiting normally."
+        exit 0
+      fi
+    fi
+    echo "Port $PORT is already in use by a different process. Consider changing OLLAMA_AGENT_PORT in .env."
+    lsof -i :"$PORT"
+    exit 1
   fi
-else
-  echo "+ Starting Docker container for MCP Agent: $SERVICE_NAME"
-  $COMPOSE_CMD up -d "$SERVICE_NAME"
 fi
 
-echo "+ Waiting for container to initialize..."
-sleep 2
+# Start service
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/../bootstrap_helpers/start_service.sh" "ollamaagent" "servutils_mcp_ollamaagent_container" "${MODE}"
 
-echo "+ Sending test prompt to running container: $CONTAINER_NAME"
+# Double check the port has your local ollama running:
+echo "+.. After restart of ollama, checking what is the service running at the desired ollama port $PORT currently:"
+lsof -i :"$PORT" -n -P | grep -v COMMAND
+echo ".."
+pid=$(lsof -t -i:$PORT)
+if [ -n "$pid" ]; then
+  ps -p "$pid" -o pid,comm
+fi
+echo ".."
+
+
+
+
+# Double check what's running  with docker:
+echo "..docker ps"
+docker ps
+
+# Send test prompt
+echo "+ Sending test prompt to running container:"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 "$SCRIPT_DIR/test_local_ollama_mcp_agent.sh"
 
 echo "MCP Agent container started and test prompt executed."

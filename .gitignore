@@ -51,6 +51,5 @@ grafana-data/
 *.sqlite3
 
 .env.grafanamcp.localgenerated
-
-grafana/grafanamcp/localgenerated/
+**/localgenerated
 _todos/testResults/
