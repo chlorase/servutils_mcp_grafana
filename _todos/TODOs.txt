@@ -11,7 +11,7 @@ TODOs:
 
 - Hookup test LLM client
     - ollama server
-    <>done
+    >done
     - ollama agent
     .. almost but somtehings messed up against the ports still... almost have it hook upabble to ZED IDE after  taht
 
@@ -23,3 +23,7 @@ TODOs:
 - save datapoints to redis allow? maybe even an api for that to transfer?
 
 - add multi tenant
+
+
+
+- NOTE: see also my newer project I may move over to, servutils_n8n_grafana
