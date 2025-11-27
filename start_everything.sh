@@ -8,7 +8,7 @@ MODE=${1:-up}  # default 'up', can also pass 'restart'
 
 # Load environment variables (for NETWORK_NAME etc)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "$SCRIPT_DIR/bootstrap_helpers/load_env_first.sh"
+. "$SCRIPT_DIR/bootstrap_helpers/load_env_first.sh"
 
 if [ "$MODE" == "restart" ]; then
     echo "Stopping all containers..."
