@@ -1,3 +1,6 @@
 [submodule "installers"]
 	path = installers
 	url = https://github.com/chlorase/installers
+[submodule "_helpers/installers_docker"]
+	path = _helpers/installers_docker
+	url = https://github.com/chlorase/installers_docker.git
