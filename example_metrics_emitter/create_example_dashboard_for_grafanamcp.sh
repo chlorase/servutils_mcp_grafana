@@ -10,7 +10,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/../bootstrap_helpers/load_env_first.sh"
 source "$SCRIPT_DIR/../${ENV_GRAFANAMCP_FILENAME}"
 
-EXAMPLE_METRICS_EMITTER_CONTAINERNAME="example_metrics_container"
+EXAMPLE_METRICS_EMITTER_CONTAINERNAME="servutils_mcp_grafana_example_metrics_container"
 # Dashboard metadata
 DASHBOARD_TITLE="MCP Metrics Dashboard"
 DASHBOARD_UID="mcp-metrics-dashboard"

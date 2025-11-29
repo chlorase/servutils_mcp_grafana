@@ -23,7 +23,7 @@ RUN_TESTS=${2:-true}
 # Start the MCP server
 echo "Starting Grafana MCP server in mode $MODE..."
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-cmd="$SCRIPT_DIR/../../bootstrap_helpers/start_service.sh grafanamcp servutils_mcp_grafanamcp_container $MODE"
+cmd="$SCRIPT_DIR/../../bootstrap_helpers/start_service.sh grafanamcp servutils_mcp_grafana_grafanamcp_container $MODE"
 echo "Running command: $cmd"
 $cmd
 

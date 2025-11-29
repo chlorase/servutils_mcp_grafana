@@ -45,22 +45,22 @@
         },
         "targets": [
           {
-            "expr": "exampleMetricA1{instance=\"example_metrics_container:8001\"}",
+            "expr": "exampleMetricA1{instance=\"servutils_mcp_grafana_example_metrics_container:8001\"}",
             "legendFormat": "ExampleMetricA1",
             "refId": "A"
           },
           {
-            "expr": "exampleMetricA2{instance=\"example_metrics_container:8001\"}",
+            "expr": "exampleMetricA2{instance=\"servutils_mcp_grafana_example_metrics_container:8001\"}",
             "legendFormat": "ExampleMetricA2",
             "refId": "B"
           },
           {
-            "expr": "example_cpu_usage{instance=\"example_metrics_container:8001\"}",
+            "expr": "example_cpu_usage{instance=\"servutils_mcp_grafana_example_metrics_container:8001\"}",
             "legendFormat": "CPU",
             "refId": "C"
           },
           {
-            "expr": "example_memory_usage{instance=\"example_metrics_container:8001\"}",
+            "expr": "example_memory_usage{instance=\"servutils_mcp_grafana_example_metrics_container:8001\"}",
             "legendFormat": "Mem",
             "refId": "D"
           }

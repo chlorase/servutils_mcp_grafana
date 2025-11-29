@@ -12,7 +12,7 @@ source "$SCRIPT_DIR/../bootstrap_helpers/load_env_first.sh"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DASHBOARD_JSON_FILE="$SCRIPT_DIR/provisioning/grafana/dashboards/example-metrics-dashboard.json"
 TIME_SERIES_FILE="$SCRIPT_DIR/provisioning/grafana/dashboards/temp_example_metrics.prom"
-EXAMPLE_METRICS_EMITTER_CONTAINERNAME="example_metrics_container"
+EXAMPLE_METRICS_EMITTER_CONTAINERNAME="servutils_mcp_grafana_example_metrics_container"
 
 # Generate example metrics
 echo "Generating example metrics..."

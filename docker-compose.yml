@@ -6,7 +6,7 @@
 services:
   grafana:
     image: grafana/grafana:latest
-    container_name: servutils_mcp_grafana_container
+    container_name: servutils_mcp_grafana_grafana_container
     environment:
       - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER} # Note of .yml files only docker-compose.yml by default auto reads from .env. Don't try this by default in other .ymls!
       - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD}
@@ -23,7 +23,7 @@ services:
 
   prometheus:
     image: prom/prometheus:latest
-    container_name: servutils_mcp_prometheus_container
+    container_name: servutils_mcp_grafana_prometheus_container
     ports:
       - "${PROMETHEUS_PORT}:${PROMETHEUS_PORT}"
     volumes:
@@ -31,7 +31,7 @@ services:
 
   loki: # Note: don't use 'latest' somehow latest may not be compatible currently:
     image: grafana/loki:2.9.0
-    container_name: servutils_mcp_loki_container
+    container_name: servutils_mcp_grafana_loki_container
     ports:
       - "${LOKI_PORT}:${LOKI_PORT}"
     command: -config.file=/etc/loki/loki-config.yml
@@ -41,7 +41,7 @@ services:
   # mcp-grafana aka 'Grafana MCP (Server)'  (Official Grafana product for expose your grafana server to LLMs: https://github.com/grafana/mcp-grafana)
   grafanamcp:
     build: grafana/grafanamcp # path to folder containing Dockerfile
-    container_name: servutils_mcp_grafanamcp_container
+    container_name: servutils_mcp_grafana_grafanamcp_container
     ports:
       - "${GRAFANA_MCP_PORT}:${GRAFANA_MCP_PORT}"
     environment:
@@ -61,14 +61,14 @@ services:
   example_metrics_emitter_servicename: # note, to work, coupled to grafana service's volumes adding the datasources and dashboards.
     build:
       context: ./example_metrics_emitter
-    container_name: example_metrics_container
+    container_name: servutils_mcp_grafana_example_metrics_container
     ports:
       - "${EXAMPLE_METRICS_EMITTER_PORT}:${EXAMPLE_METRICS_EMITTER_PORT}" # host_port:container_port
 
   ollamaagent:
     build:
       context: ./llm/ollama_agent
-    container_name: servutils_mcp_ollamaagent_container
+    container_name: servutils_mcp_grafana_ollamaagent_container
     environment:
       - OLLAMA_API_URL=http://host.docker.internal:11434
     ports:

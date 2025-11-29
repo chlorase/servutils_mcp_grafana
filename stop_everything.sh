@@ -2,11 +2,12 @@
 # stop_everything.sh
 # Stops and removes all Docker containers associated with this project,
 # optionally removes volumes, and cleans up the network.
-# PRE: the prefixes of all your containers in this project, as specified in docker-compose.yml use a same 'servutils_mcp_grafana'.
-set -euo pipefail
-echo "Running Script: ./${BASH_SOURCE[0]/#$(pwd)\//} $@"
-
+# PRE: the prefixes of all your containers in this project, as specified in docker-compose.yml
+# and they all use this same 'PROJECT_PREFIX' prefix:
 PROJECT_PREFIX="servutils_mcp_grafana"
+
+set -euo pipefail
+echo -e "\n===\nRunning Script: ./${BASH_SOURCE[0]/#$(pwd)\//} $@"
 
 # Load environment variables
 ./bootstrap_helpers/load_env_first.sh

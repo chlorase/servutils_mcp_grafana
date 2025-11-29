@@ -19,11 +19,11 @@ echo "Starting Example Metrics Emitter in mode: $MODE"
 # Start the Example Metrics Emitter service
 echo "Starting service..."
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-_cmd="source $SCRIPT_DIR/../bootstrap_helpers/start_service.sh example_metrics_emitter_servicename example_metrics_container $MODE"
+_cmd="source $SCRIPT_DIR/../bootstrap_helpers/start_service.sh example_metrics_emitter_servicename servutils_mcp_grafana_example_metrics_container $MODE"
 echo "Running command: $_cmd"
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "$SCRIPT_DIR/../bootstrap_helpers/start_service.sh" "example_metrics_emitter_servicename" "example_metrics_container" "${MODE}"
+source "$SCRIPT_DIR/../bootstrap_helpers/start_service.sh" "example_metrics_emitter_servicename" "servutils_mcp_grafana_example_metrics_container" "${MODE}"
 echo "Example Metrics Emitter started."
 
 if [ "$MODE" == "restart" ]; then

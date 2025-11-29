@@ -19,7 +19,7 @@ if [ "$MODE" != "restart" ]; then
     ps_output=$(ps -p "$pid" -o pid,comm)
     if (echo "$ps_output" | grep -q "com.docker.backend"); then
       # Double check ollama container *is* runnign too:
-      if docker ps --format '{{.Names}}' | grep -q "servutils_mcp_ollamaagent_container"; then
+      if docker ps --format '{{.Names}}' | grep -q "servutils_mcp_grafana_ollamaagent_container"; then
         echo "Ollama is already running. Exiting normally."
         exit 0
       fi
@@ -32,7 +32,7 @@ fi
 
 # Start service
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "$SCRIPT_DIR/../bootstrap_helpers/start_service.sh" "ollamaagent" "servutils_mcp_ollamaagent_container" "${MODE}"
+source "$SCRIPT_DIR/../bootstrap_helpers/start_service.sh" "ollamaagent" "servutils_mcp_grafana_ollamaagent_container" "${MODE}"
 
 # Double check the port has your local ollama running:
 echo "+.. After restart of ollama, checking what is the service running at the desired ollama port $PORT currently:"
