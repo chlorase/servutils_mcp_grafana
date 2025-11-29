@@ -1,4 +1,7 @@
 servutils_mcp_grafana/
+├── _todos/
+│   ├── dirLayout.txt
+│   └── TODOs.txt
 ├── bootstrap_helpers/
 │   ├── ensure_docker_running.sh
 │   ├── ensure_installers_helpers_synced.sh
@@ -63,6 +66,7 @@ servutils_mcp_grafana/
 ├── .env.grafana.localgenerated (auto-generated locally, not checked in)
 ├── .gitattributes
 ├── .gitignore
+├── .gitmodules
 ├── docker-compose.yaml
 ├── README.md
 ├── restart_everything.sh (Wraps "start_everything.sh restart")
