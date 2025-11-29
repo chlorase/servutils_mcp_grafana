@@ -1,6 +1,7 @@
 #!/bin/bash
 # ensure_installers_helpers_synced.sh
 # Ensures the 'installers' submodule is initialized, updated, and available locally.
+# TODO: refactor to use common helper in installers/_helpers/.. instead of this file's duplicating code.
 set -euo pipefail
 echo ".. Helper: ./${BASH_SOURCE[0]/#$(pwd)\//} $@"
 

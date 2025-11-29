@@ -1,5 +1,6 @@
 #!/bin/bash
 # Common helper to ensure local docker daemon running
+# TODO: refactor to use common helper in installers/_helpers/installers_docker instead of this file's duplicating code.
 set -euo pipefail
 echo ".. Helper: ./${BASH_SOURCE[0]/#$(pwd)\//} $@"
 

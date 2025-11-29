@@ -1,5 +1,6 @@
 #!/bin/bash
 # Helper to wait for all current command input arg list of services, to be in running state (in your local docker)
+# TODO: refactor to use common helper in installers/_helpers/installers_docker instead of this file's duplicating code.
 echo ".. Helper: ./${BASH_SOURCE[0]/#$(pwd)\//} $@"
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

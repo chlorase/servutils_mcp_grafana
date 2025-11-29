@@ -1,6 +1,7 @@
 #!/bin/bash
 # start_service.sh
 # Helper to start a Docker Compose service
+# TODO: refactor to use common helper in installers/_helpers/installers_docker instead of this file's duplicating code.
 
 SERVICE_NAME=$1
 CONTAINER_NAME=$2
