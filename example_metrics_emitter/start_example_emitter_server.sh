@@ -31,7 +31,7 @@ if [ "$MODE" == "restart" ]; then
     PROM_SCRAPE_TIMEOUT=${PROM_SCRAPE_TIMEOUT:-30}  # seconds, configurable in .env
     echo "Waiting for Prometheus to scrape metrics from example_metrics..."
     END_SCRAPE=$((SECONDS+PROM_SCRAPE_TIMEOUT))
-    while true; do
+    while true; do # bstdo shouldn't this be 'PROMETHEUS_URL' there's no PROMETHEUS_HOST I can find?
         METRIC_COUNT=$(curl -s http://${PROMETHEUS_HOST:-localhost}:${PROMETHEUS_PORT}/metrics | grep -c '.')
         echo "Metrics scraped so far: $METRIC_COUNT"
         if [ "$METRIC_COUNT" -gt 0 ]; then
